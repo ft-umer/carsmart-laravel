@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html class="h-full" data-kt-theme="true" data-kt-theme-mode="light" dir="ltr" lang="en">
+<head>
+    <base href="http://localhost/">
+    <title>Carsmart — Customer Segments</title>
+    <meta charset="utf-8"/>
+    <meta name="robots" content="follow, index"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="csrf-token" content="aTJclcf9NiRg4nzQ1WoweAciKNArhvYzpyAXNpDa"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="http://localhost/assets/vendors/apexcharts/apexcharts.css" rel="stylesheet"/>
+    <link href="http://localhost/assets/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
+    <link href="http://localhost/assets/css/styles.css" rel="stylesheet"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="http://localhost/assets/media/app/apple-touch-icon.png"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="http://localhost/assets/media/app/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="http://localhost/assets/media/app/favicon-16x16.png"/>
+    <link rel="shortcut icon" href="http://localhost/assets/media/app/favicon.ico"/>
+    <script type="module" src="http://[::1]:5173/@vite/client"></script><link rel="stylesheet" href="http://[::1]:5173/resources/css/app.css" /><script type="module" src="http://[::1]:5173/resources/js/app.js"></script>    </head>
+<body class="antialiased flex h-full text-base text-foreground bg-background demo1 kt-sidebar-fixed kt-header-fixed">
+
+    
+    <script>
+        const defaultThemeMode = 'light';
+        let themeMode;
+        if (document.documentElement) {
+            if (localStorage.getItem('kt-theme')) {
+                themeMode = localStorage.getItem('kt-theme');
+            } else if (document.documentElement.hasAttribute('data-kt-theme-mode')) {
+                themeMode = document.documentElement.getAttribute('data-kt-theme-mode');
+            } else {
+                themeMode = defaultThemeMode;
+            }
+            if (themeMode === 'system') {
+                themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.classList.add(themeMode);
+        }
+    </script>
+
+    <div class="flex grow">
+
+        
+        <div class="kt-sidebar dark bg-background border-e border-e-border fixed top-0 bottom-0 z-20 hidden lg:flex flex-col items-stretch shrink-0 [--kt-drawer-enable:true] lg:[--kt-drawer-enable:false]"
+     data-kt-drawer="true"
+     data-kt-drawer-class="kt-drawer kt-drawer-start top-0 bottom-0"
+     id="sidebar">
+
+    
+    <div class="kt-sidebar-header hidden lg:flex items-center relative justify-between px-3 lg:px-6 shrink-0" id="sidebar_header">
+        <a href="http://localhost">
+            <img class="default-logo min-h-[22px] max-w-none" src="http://localhost/assets/media/app/default-logo-dark.svg"/>
+            <img class="small-logo min-h-[22px] max-w-none" src="http://localhost/assets/media/app/mini-logo.svg"/>
+        </a>
+        <div data-kt-toggle="body" data-kt-toggle-class="kt-sidebar-collapse" id="sidebar_toggle">
+            <div class="hidden dark:block">
+                <button class="kt-btn kt-btn-outline kt-btn-icon size-[30px] bg-white border border-white hover:[&_i]:text-black/80 border border-black/10! absolute start-full top-2/4 -translate-x-2/4 -translate-y-2/4 rtl:translate-x-2/4"
+                        aria-label="Collapse sidebar">
+                    <i class="ki-filled ki-black-left-line kt-toggle-active:rotate-180 transition-all duration-300 rtl:rotate-180 rtl:kt-toggle-active:rotate-0"></i>
+                </button>
+            </div>
+            <div class="dark:hidden light">
+                <button class="kt-btn kt-btn-outline kt-btn-icon size-[30px] rounded-lg absolute start-full top-2/4 -translate-x-2/4 -translate-y-2/4 rtl:translate-x-2/4"
+                        aria-label="Collapse sidebar">
+                    <i class="ki-filled ki-black-left-line kt-toggle-active:rotate-180 transition-all duration-300 rtl:rotate-180 rtl:kt-toggle-active:rotate-0"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="kt-sidebar-content flex grow shrink-0 py-5 pe-2" id="sidebar_content">
+        <div class="kt-scrollable-y-hover grow shrink-0 flex ps-2 lg:ps-5 pe-1 lg:pe-3"
+             data-kt-scrollable="true"
+             data-kt-scrollable-dependencies="#sidebar_header"
+             data-kt-scrollable-height="auto"
+             data-kt-scrollable-offset="0px"
+             data-kt-scrollable-wrappers="#sidebar_content"
+             id="sidebar_scrollable">
+
+            <div class="kt-menu flex flex-col grow gap-0.5"
+                 data-kt-menu="true"
+                 data-kt-menu-accordion-expand-all="false"
+                 id="sidebar_menu">
+
+                                    
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-element-11 text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Dashboard
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Overview</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/dashboard/analytics"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Analytics</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/dashboard/activity"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Activity</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-user-circle text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Leads
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/leads"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">All Leads</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/leads/new"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">New Leads</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/leads/qualified"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Qualified</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/leads/archived"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Archived</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-row-horizontal text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Listings
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/listings"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">All Listings</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/listings/active"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Active Listings</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/listings/drafts"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Drafts</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/listings/categories"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Categories</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-price-tag text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Auctions
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/auctions/live"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Live Auctions</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/auctions/upcoming"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Upcoming</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/auctions/closed"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Closed</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/auctions/bids"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Bids</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-book-open text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Editions
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/editions"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">All Editions</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/editions/create"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Create Edition</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/editions/schedules"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Schedules</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-shop text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Vendors
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/vendors"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Vendor Directory</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/vendors/applications"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Applications</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/vendors/performance"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Performance</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item kt-menu-item-open"
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        bg-accent/60 rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-people text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Customers
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class=" kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/customers"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Customer List</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/customers/segments"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-primary font-medium
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Segments</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/customers/support"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Support Requests</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/customers/history"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Purchase History</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-dollar text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Payments
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/payments/transactions"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Transactions</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/payments/invoices"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Invoices</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/payments/refunds"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Refunds</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/payments/payouts"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Payouts</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-delivery text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Logistics
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/logistics/shipments"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Shipments</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/logistics/tracking"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Tracking</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/logistics/warehouses"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Warehouses</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/logistics/status"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Delivery Status</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-shield-cross text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Disputes
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/disputes/open"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Open Cases</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/disputes/resolved"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Resolved</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/disputes/escalations"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Escalations</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-abstract-26 text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Content Management
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/content/pages"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Pages</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/content/blogs"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Blogs</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/content/media"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Media Library</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/content/seo"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">SEO</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-abstract-13 text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Automations
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/automations/workflows"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Workflows</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/automations/email"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Email Automation</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/automations/triggers"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Triggers</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/automations/scheduled"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Scheduled Tasks</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-chart-line text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Reports
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/reports/sales"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Sales Reports</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/reports/users"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">User Reports</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/reports/auctions"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Auction Reports</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/reports/exports"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Exports</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-setting-2 text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Settings
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/settings/general"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">General</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/settings/users"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Users and Roles</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/settings/integrations"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Integrations</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/settings/security"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Security</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-notification-status text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Notifications
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/notifications/inbox"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Inbox</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/notifications/templates"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Templates</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/notifications/preferences"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Preferences</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                                        
+                                            
+                        <div class="kt-menu-item "
+                             data-kt-menu-item-toggle="accordion"
+                             data-kt-menu-item-trigger="click">
+
+                            <div class="kt-menu-link border border-transparent items-center grow
+                                        hover:bg-accent/60 hover:rounded-lg
+                                        gap-[14px] ps-[10px] pe-[10px] py-[8px] cursor-pointer">
+                                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                                    <i class="ki-filled ki-calendar-tick text-base"></i>
+                                </span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground grow">
+                                    Tasks
+                                </span>
+                                <span class="kt-menu-arrow">
+                                    <i class="ki-filled ki-down text-xs transition-transform duration-200 kt-menu-item-open:rotate-180"></i>
+                                </span>
+                            </div>
+
+                            
+                            <div class="hidden kt-menu-accordion ps-7">
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/tasks/mine"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">My Tasks</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/tasks/team"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Team Tasks</span>
+                                        </a>
+                                    </div>
+                                                                                                        <div class="kt-menu-item">
+                                        <a href="http://localhost/tasks/completed"
+                                           class="kt-menu-link border border-transparent items-center grow
+                                                  text-muted-foreground hover:text-foreground
+                                                  ps-[10px] pe-[10px] py-[6px] rounded-lg hover:bg-accent/40 text-sm">
+                                            <span class="kt-menu-title">Completed</span>
+                                        </a>
+                                    </div>
+                                                            </div>
+                        </div>
+
+                                    
+            </div>
+        </div>
+    </div>
+
+</div>
+
+        
+        <div class="kt-wrapper flex grow flex-col">
+
+            
+            <header class="kt-header fixed top-0 z-10 start-0 end-0 flex items-stretch shrink-0 bg-background"
+                    data-kt-sticky="true"
+                    data-kt-sticky-class="border-b border-border"
+                    data-kt-sticky-name="header"
+                    id="header">
+
+                <div class="kt-container-fixed flex justify-between items-stretch lg:gap-4" id="headerContainer">
+
+                    
+                    <div class="flex gap-2.5 lg:hidden items-center -ms-1">
+                        <a class="shrink-0" href="http://localhost">
+                            <img class="max-h-[25px] w-full" src="http://localhost/assets/media/app/mini-logo.svg"/>
+                        </a>
+                        <button class="kt-btn kt-btn-icon kt-btn-ghost" data-kt-drawer-toggle="#sidebar">
+                            <i class="ki-filled ki-menu"></i>
+                        </button>
+                    </div>
+
+                    
+                    <div class="hidden lg:flex items-center gap-2 me-auto ms-4">
+                                                <div class="kt-menu" data-kt-menu="true">
+                            <div class="kt-menu-item"
+                                 data-kt-menu-item-offset="0,10px"
+                                 data-kt-menu-item-placement="bottom-start"
+                                 data-kt-menu-item-toggle="dropdown"
+                                 data-kt-menu-item-trigger="click|lg:hover">
+                                <button class="kt-menu-toggle kt-btn kt-btn-ghost flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg">
+                                    <i class="ki-filled ki-setting-3 text-base"></i>
+                                    <span>Admin</span>
+                                    <i class="ki-filled ki-down text-xs"></i>
+                                </button>
+                                <div class="kt-menu-dropdown kt-menu-default w-[220px]" data-kt-menu-dismiss="true">
+                                    <div class="kt-menu-item">
+                                        <a class="kt-menu-link kt-menu-item-active"
+                                           href="http://localhost/switch-app/admin">
+                                            <span class="kt-menu-icon"><i class="ki-filled ki-home-2"></i></span>
+                                            <span class="kt-menu-title">Admin</span>
+                                        </a>
+                                    </div>
+                                    <div class="kt-menu-item">
+                                        <a class="kt-menu-link "
+                                           href="http://localhost/switch-app/crm">
+                                            <span class="kt-menu-icon"><i class="ki-filled ki-people"></i></span>
+                                            <span class="kt-menu-title">Customer Relationship Management</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="flex items-center gap-2.5">
+
+                        
+                        <button class="group kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary"
+                                data-kt-modal-toggle="#search_modal"
+                                title="Search (f)"
+                                aria-label="Global search">
+                            <i class="ki-filled ki-magnifier text-lg group-hover:text-primary"></i>
+                        </button>
+
+                        
+                        <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary relative"
+                                data-kt-drawer-toggle="#notifications_drawer"
+                                title="Notifications"
+                                aria-label="Open notifications">
+                            <i class="ki-filled ki-notification-status text-lg"></i>
+                            <span class="absolute top-1.5 end-1.5 size-2 rounded-full bg-danger"></span>
+                        </button>
+
+                        
+                        <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary"
+                                data-kt-drawer-toggle="#tasks_drawer"
+                                title="My tasks"
+                                aria-label="Open task inbox">
+                            <i class="ki-filled ki-clipboard text-lg"></i>
+                        </button>
+
+                        
+                        <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary"
+                                data-kt-modal-toggle="#help_modal"
+                                title="Help (?)"
+                                aria-label="Open help centre">
+                            <i class="ki-filled ki-information-2 text-lg"></i>
+                        </button>
+
+                        
+                        <div class="kt-menu" data-kt-menu="true">
+                            <div class="kt-menu-item"
+                                 data-kt-menu-item-offset="0,10px"
+                                 data-kt-menu-item-placement="bottom-end"
+                                 data-kt-menu-item-toggle="dropdown"
+                                 data-kt-menu-item-trigger="click|lg:hover">
+                                <div class="kt-menu-toggle cursor-pointer">
+                                    <div class="kt-avatar size-9 rounded-full">
+                                        <div class="kt-avatar-image rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                                            U
+                                        </div>
+                                        <div class="kt-avatar-indicator kt-avatar-status kt-avatar-status-online bottom-0 end-0"></div>
+                                    </div>
+                                </div>
+                                <div class="kt-menu-dropdown kt-menu-default w-[200px]" data-kt-menu-dismiss="true">
+                                    <div class="px-4 py-3 border-b border-border">
+                                        <div class="text-sm font-semibold text-mono">User</div>
+                                        <div class="text-xs text-muted-foreground mt-0.5"></div>
+                                    </div>
+                                    <div class="kt-menu-item">
+                                        <a class="kt-menu-link" href="#">
+                                            <span class="kt-menu-icon"><i class="ki-filled ki-profile-circle"></i></span>
+                                            <span class="kt-menu-title">User settings</span>
+                                        </a>
+                                    </div>
+                                    <div class="border-t border-border mt-1 pt-1">
+                                        <div class="kt-menu-item">
+                                            <form method="POST" action="http://localhost/sign-out">
+                                                <input type="hidden" name="_token" value="aTJclcf9NiRg4nzQ1WoweAciKNArhvYzpyAXNpDa" autocomplete="off">                                                <button type="submit" class="kt-menu-link w-full text-start">
+                                                    <span class="kt-menu-icon"><i class="ki-filled ki-exit-right"></i></span>
+                                                    <span class="kt-menu-title">Sign out</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+            
+
+            
+            <main class="grow pt-[--kt-header-height]" id="main_content">
+                
+                <div class="kt-container-fixed py-12 flex flex-col items-center justify-center min-h-[60vh] text-center gap-5">
+    <div class="flex items-center justify-center size-20 rounded-2xl bg-muted">
+        <i class="ki-filled ki-abstract-26 text-4xl text-muted-foreground/50"></i>
+    </div>
+    <div>
+        <h2 class="text-xl font-semibold text-mono mb-2">Customer Segments</h2>
+        <p class="text-sm text-muted-foreground max-w-[340px]">
+            This section is planned for a future phase. Use the navigation to return to an available area.
+        </p>
+    </div>
+    <a href="http://localhost" class="kt-btn kt-btn-primary">
+        <i class="ki-filled ki-home-2 text-sm me-1.5"></i>
+        Back to dashboard
+    </a>
+</div>
+            </main>
+
+            
+            
+        </div>
+    </div>
+
+    
+    <div class="hidden kt-drawer kt-drawer-end flex-col max-w-[90%] w-[520px] top-0 bottom-0 end-0 bg-background border-s border-border"
+         data-kt-drawer="true"
+         data-kt-drawer-container="body"
+         id="context_panel">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-border shrink-0">
+            <h3 class="text-sm font-semibold text-mono" id="context_panel_title">Quick view</h3>
+            <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" data-kt-drawer-dismiss="true" aria-label="Close panel">
+                <i class="ki-filled ki-cross"></i>
+            </button>
+        </div>
+        
+        <div class="kt-tabs kt-tabs-line px-5" data-kt-tabs="true">
+            <div class="flex items-center gap-5">
+                <button class="kt-tab-toggle py-3 text-sm active" data-kt-tab-toggle="#ctx_tab_summary">Summary</button>
+                <button class="kt-tab-toggle py-3 text-sm" data-kt-tab-toggle="#ctx_tab_edit">Edit</button>
+                <button class="kt-tab-toggle py-3 text-sm" data-kt-tab-toggle="#ctx_tab_notes">Notes</button>
+                <button class="kt-tab-toggle py-3 text-sm" data-kt-tab-toggle="#ctx_tab_comms">Communications</button>
+            </div>
+        </div>
+        <div class="grow overflow-y-auto px-5 py-4" id="context_panel_body">
+            <div id="ctx_tab_summary"></div>
+            <div id="ctx_tab_edit" class="hidden"></div>
+            <div id="ctx_tab_notes" class="hidden"></div>
+            <div id="ctx_tab_comms" class="hidden"></div>
+        </div>
+        <div class="shrink-0 flex items-center gap-3 px-5 py-3.5 border-t border-border">
+            <button class="kt-btn kt-btn-primary kt-btn-sm" id="ctx_panel_save">Save</button>
+            <button class="kt-btn kt-btn-ghost kt-btn-sm" data-kt-drawer-dismiss="true">Close</button>
+        </div>
+    </div>
+
+    
+    <div class="hidden kt-drawer kt-drawer-end card flex-col max-w-[90%] w-[450px] top-5 bottom-5 end-5 rounded-xl border border-border"
+         data-kt-drawer="true"
+         data-kt-drawer-container="body"
+         id="notifications_drawer">
+        <div class="flex items-center justify-between gap-2.5 text-sm text-mono font-semibold px-5 py-2.5 border-b border-b-border">
+            Notifications
+            <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-drawer-dismiss="true" aria-label="Close notifications">
+                <i class="ki-filled ki-cross"></i>
+            </button>
+        </div>
+        <div class="kt-tabs kt-tabs-line justify-between px-5 mb-2" data-kt-tabs="true">
+            <div class="flex items-center gap-5">
+                <button class="kt-tab-toggle py-3 active" data-kt-tab-toggle="#notif_all">All</button>
+                <button class="kt-tab-toggle py-3 relative" data-kt-tab-toggle="#notif_inbox">
+                    Inbox
+                    <span class="rounded-full bg-green-500 size-[5px] absolute top-2 end-0 transform translate-y-1/2 translate-x-full"></span>
+                </button>
+            </div>
+        </div>
+        <div class="grow kt-scrollable-y-auto p-5 text-sm text-muted-foreground" id="notif_all">
+            No new notifications.
+        </div>
+        <div class="hidden grow kt-scrollable-y-auto p-5 text-sm text-muted-foreground" id="notif_inbox">
+            Your inbox is empty.
+        </div>
+    </div>
+
+    
+    <div class="hidden kt-drawer kt-drawer-end flex-col max-w-[90%] w-[420px] top-0 bottom-0 end-0 bg-background border-s border-border"
+         data-kt-drawer="true"
+         data-kt-drawer-container="body"
+         id="tasks_drawer">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-border shrink-0">
+            <h3 class="text-sm font-semibold text-mono">My tasks</h3>
+            <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" data-kt-drawer-dismiss="true" aria-label="Close tasks">
+                <i class="ki-filled ki-cross"></i>
+            </button>
+        </div>
+        <div class="grow overflow-y-auto p-5 text-sm text-muted-foreground">
+            Your task inbox is empty.
+        </div>
+    </div>
+
+    
+    <div class="hidden kt-modal" data-kt-modal="true" id="search_modal">
+        <div class="kt-modal-content max-w-[600px] w-full mt-[10vh] mx-auto">
+            <div class="kt-card">
+                <div class="kt-card-content p-4">
+                    <div class="kt-input flex items-center gap-2">
+                        <i class="ki-filled ki-magnifier text-muted-foreground"></i>
+                        <input type="search"
+                               class="grow bg-transparent outline-none text-sm"
+                               placeholder="Search lot number, listing, auction, registration, person, company, email, phone…"
+                               id="global_search_input"
+                               autofocus
+                               autocomplete="off"/>
+                        <kbd class="text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5 hidden lg:block">Esc</kbd>
+                    </div>
+                    <div class="mt-3 text-xs text-muted-foreground px-1" id="search_hint">
+                        Start typing to search…
+                    </div>
+                    <div id="search_results" class="hidden mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="hidden kt-modal" data-kt-modal="true" id="help_modal">
+        <div class="kt-modal-content max-w-[480px] w-full mt-[15vh] mx-auto">
+            <div class="kt-card">
+                <div class="kt-card-header flex items-center justify-between">
+                    <h3 class="kt-card-title text-base">Help centre</h3>
+                    <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" data-kt-modal-dismiss="true" aria-label="Close help">
+                        <i class="ki-filled ki-cross"></i>
+                    </button>
+                </div>
+                <div class="kt-card-content p-5 text-sm text-secondary-foreground">
+                    Browse documentation, keyboard shortcuts, and support resources.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="http://localhost/assets/js/core.bundle.js"></script>
+    <script src="http://localhost/assets/vendors/ktui/ktui.min.js"></script>
+    <script src="http://localhost/assets/vendors/apexcharts/apexcharts.min.js"></script>
+
+    
+    <script>
+    document.addEventListener('keydown', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'f' && !e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            document.getElementById('global_search_input')?.focus();
+            KTModal.getInstance(document.getElementById('search_modal'))?.show();
+        }
+        if (e.key === '?') {
+            KTModal.getInstance(document.getElementById('help_modal'))?.show();
+        }
+        if (e.key === 'g') {
+            window._ktNavPrefix = true;
+            return;
+        }
+        if (window._ktNavPrefix) {
+            window._ktNavPrefix = false;
+            if (e.key === 'd') window.location.href = 'http://localhost';
+            if (e.key === 'l') window.location.href = 'http://localhost/listings';
+            if (e.key === 'a') window.location.href = 'http://localhost/auctions';
+        }
+        if (e.key === '.' && !e.ctrlKey) {
+            /* quick actions palette — stub */ 
+        }
+    });
+    </script>
+
+    </body>
+</html>
