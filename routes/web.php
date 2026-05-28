@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ListingController;
+use App\Http\Controllers\ListingCreateController;
+use App\Http\Controllers\ListingDetailController;
+use App\Http\Controllers\QAController;
+use App\Http\Controllers\ValuationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,7 +49,7 @@ Route::get('/switch-app/{app}', function ($app) {
 })->name('switch-app');
 
 // ── C1. Admin home ──────────────────────────────────────────────────────
-Route::get('/', fn() => view('dashboard'))->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard.overview');
 Route::get('/dashboard/analytics', fn() => view('dashboard'))->name('dashboard.analytics');
 Route::get('/dashboard/activity', fn() => view('dashboard'))->name('dashboard.activity');
@@ -57,11 +63,27 @@ Route::get('/leads/new',              fn() => view('stub', ['title' => 'New Lead
 Route::get('/leads/qualified',        fn() => view('stub', ['title' => 'Qualified Leads']))->name('leads.qualified');
 Route::get('/leads/archived',         fn() => view('stub', ['title' => 'Archived Leads']))->name('leads.archived');
 
-Route::get('/listings',               fn() => view('stub', ['title' => 'All Listings']))->name('listings.index');
-Route::get('/listings/active',        fn() => view('stub', ['title' => 'Active Listings']))->name('listings.active');
-Route::get('/listings/drafts',        fn() => view('stub', ['title' => 'Draft Listings']))->name('listings.drafts');
-Route::get('/listings/categories',    fn() => view('stub', ['title' => 'Listing Categories']))->name('listings.categories');
-Route::get('/listings/create',        fn() => view('stub', ['title' => 'Create Listing']))->name('listings.create');
+/*
+|--------------------------------------------------------------------------
+| Listings — Phase 1
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('listings')->group(function () {
+    Route::get('/', [ListingController::class, 'index'])->name('listings.index');
+    Route::get('/create', [ListingCreateController::class, 'create'])->name('listings.create');
+    Route::post('/store', [ListingCreateController::class, 'store'])->name('listings.store');
+    Route::get('/{id}', [ListingDetailController::class, 'show'])->name('listings.show');
+});
+
+Route::prefix('valuations')->group(function () {
+    Route::get('/', [ValuationController::class, 'index'])->name('valuations.index');
+    Route::post('/pull/{id}', [ValuationController::class, 'pull'])->name('valuations.pull');
+    Route::post('/add/{id}', [ValuationController::class, 'add'])->name('valuations.add');
+    Route::post('/apply/{id}', [ValuationController::class, 'apply'])->name('valuations.apply');
+});
+
+Route::get('/qa', [QAController::class, 'index'])->name('qa.index');
 
 Route::get('/auctions',               fn() => view('stub', ['title' => 'Auctions']))->name('auctions.index');
 Route::get('/auctions/live',          fn() => view('stub', ['title' => 'Live Auctions']))->name('auctions.live');
