@@ -68,7 +68,7 @@ Route::get('/leads/archived',         fn() => view('stub', ['title' => 'Archived
 | Listings — Phase 1
 |--------------------------------------------------------------------------
 */
-
+// Listings routes
 Route::prefix('listings')->group(function () {
     Route::get('/', [ListingController::class, 'index'])->name('listings.index');
     Route::get('/create', [ListingCreateController::class, 'create'])->name('listings.create');
