@@ -1,43 +1,51 @@
 <div class="card rounded-lg border border-border p-3 mb-4">
 
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
+    <form id="listing-filters" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
 
-        <input
-            class="kt-input"
-            placeholder="Search..." />
+        <!-- SEARCH -->
+        <input name="search" class="kt-input w-full min-w-0" placeholder="Search listing, vehicle, VRM..." />
 
-        <select class="kt-input">
-            <option>Any status</option>
-            <option>Draft</option>
-            <option>Ready</option>
+        <!-- STATUS -->
+        <select name="state" class="kt-input w-full min-w-0">
+            <option value="">Any status</option>
+            <option value="Draft">Draft</option>
+            <option value="Ready">Ready</option>
         </select>
 
-        <select class="kt-input">
-            <option>Owner</option>
-            <option>JR</option>
-            <option>AM</option>
+        <!-- OWNER -->
+        <select name="owner" class="kt-input w-full min-w-0">
+            <option value="">Any owner</option>
+            <option value="JR">JR</option>
+            <option value="AM">AM</option>
         </select>
 
-        <select class="kt-input">
-            <option>Valuation</option>
+        <!-- QA -->
+        <select name="qa" class="kt-input w-full min-w-0">
+            <option value="">QA status</option>
+            <option value="Pass">Pass</option>
+            <option value="Needs">Needs</option>
         </select>
 
-        <select class="kt-input">
-            <option>Missing</option>
+        <!-- RESERVE -->
+        <select name="reserve" class="kt-input w-full min-w-0">
+            <option value="">Reserve</option>
+            <option value="1">Has Reserve</option>
+            <option value="0">No Reserve</option>
         </select>
 
-        <div class="flex gap-2">
+        <!-- ACTIONS -->
+        <div class="flex gap-2 w-full">
 
-            <button class="kt-btn kt-btn-ghost">
+            <button type="button" id="reset-filters" class="kt-btn kt-btn-ghost">
                 Reset
             </button>
 
-            <button class="kt-btn kt-btn-mono">
+            <button type="submit" class="kt-btn kt-btn-mono">
                 Apply
             </button>
 
         </div>
 
-    </div>
+    </form>
 
 </div>

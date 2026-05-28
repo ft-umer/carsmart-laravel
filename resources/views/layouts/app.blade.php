@@ -2,7 +2,7 @@
      Global Shell — B1 Header · B2 Left Navigation · B3 Right Side Panel · B4 Footer
 --}}
 <!DOCTYPE html>
-<html class="h-full" data-kt-theme="true" data-kt-theme-mode="light" dir="ltr" lang="en">
+<html class="h-full" data-kt-theme-mode="dark" dir="ltr" lang="en">
 
 <head>
     <base href="{{ asset('') }}">
@@ -15,10 +15,10 @@
     <link href="{{ asset('assets/vendors/apexcharts/apexcharts.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendors/keenicons/styles.bundle.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/app/apple-touch-icon.png') }}" />
+    {{-- <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/media/app/apple-touch-icon.png') }}" />
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/media/app/favicon-32x32.png') }}" />
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/media/app/favicon-16x16.png') }}" />
-    <link rel="shortcut icon" href="{{ asset('assets/media/app/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/app/favicon.ico') }}" /> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
@@ -27,7 +27,7 @@
 
     {{-- Theme initialiser --}}
     <script>
-        const defaultThemeMode = 'light';
+        const defaultThemeMode = 'dark';
         let themeMode;
         if (document.documentElement) {
             if (localStorage.getItem('kt-theme')) {
@@ -593,7 +593,51 @@
                 /* quick actions palette — stub */
             }
         });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+
+    const wizard = document.getElementById('add-listing-wizard');
+    const detail = document.getElementById('listing-detail-modal');
+
+    const createBtn = document.getElementById('btn-create-listing');
+
+    function openModal(el) {
+        if (!el) return;
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+    }
+
+    function closeModal(el) {
+        if (!el) return;
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+    }
+
+    if (createBtn) {
+        createBtn.addEventListener('click', () => {
+            openModal(wizard);
+        });
+    }
+
+    document.querySelectorAll('.open-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+            openModal(detail);
+        });
+    });
+
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+
+            document.querySelectorAll('#add-listing-wizard, #listing-detail-modal, #apply-pricing-modal, #add-valuation-modal, #quick-view-modal')
+                .forEach(closeModal);
+
+        });
+    });
+
+});
     </script>
+    
+    
     
 
     @stack('scripts')

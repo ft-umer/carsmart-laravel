@@ -11,8 +11,7 @@
         <div class="kt-card-content flex flex-col gap-5 p-10">
 
             <div class="text-center mb-2.5">
-                <img class="h-8 max-w-none mx-auto dark:hidden mb-4" src="{{ asset('assets/media/app/default-logo.svg') }}" alt="Carsmart"/>
-                <img class="h-8 max-w-none mx-auto hidden dark:block mb-4" src="{{ asset('assets/media/app/default-logo-dark.svg') }}" alt="Carsmart"/>
+                <img id="logoHeader" class="h-8 max-w-none mx-auto dark:hidden mb-4" alt="">
                 <h3 class="text-lg font-medium text-mono leading-none mb-2.5">Reset password</h3>
                 <p class="text-sm text-muted-foreground">Choose a strong new password.</p>
             </div>

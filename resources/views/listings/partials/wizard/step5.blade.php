@@ -4,8 +4,7 @@
         Summary & Submit
     </h4>
 
-    <div
-    class="border border-border rounded-lg p-4 bg-muted/20">
+    <div class="border border-border rounded-lg p-4 bg-muted/20">
 
         <div class="text-sm text-muted-foreground">
 
@@ -16,14 +15,6 @@
 
     </div>
 
-    <div class="flex justify-end">
-
-        <button class="kt-btn kt-btn-mono">
-
-            Create Listing
-
-        </button>
-
-    </div>
+    
 
 </div>
