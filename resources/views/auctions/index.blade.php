@@ -305,8 +305,196 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     });
+    
+    
+// ─────────────────────────────
+// Create Auction Modal
+// ─────────────────────────────
+
+const createAuctionBtn = document.getElementById('btn-create-auction');
+const createAuctionModal = document.getElementById('create-auction-modal');
+
+if (createAuctionBtn && createAuctionModal) {
+
+    createAuctionBtn.addEventListener('click', () => {
+
+        // show wrapper
+        createAuctionModal.classList.remove('hidden');
+        createAuctionModal.classList.add('flex');
+
+        // animate dialog
+        const dialog = createAuctionModal.querySelector('[role="dialog"]');
+
+        setTimeout(() => {
+
+            dialog.classList.remove('opacity-0', 'scale-95');
+            dialog.classList.add('opacity-100', 'scale-100');
+
+        }, 10);
+
+    });
+
+}
+
+// ─────────────────────────────
+// Close Modal
+// ─────────────────────────────
+
+const closeModal = () => {
+
+    const dialog = createAuctionModal.querySelector('[role="dialog"]');
+
+    dialog.classList.remove('opacity-100', 'scale-100');
+    dialog.classList.add('opacity-0', 'scale-95');
+
+    setTimeout(() => {
+
+        createAuctionModal.classList.add('hidden');
+        createAuctionModal.classList.remove('flex');
+
+    }, 200);
+
+};
+
+createAuctionModal.querySelectorAll('[data-modal-close], [data-modal-backdrop]')
+    .forEach(el => {
+
+        el.addEventListener('click', closeModal);
+
+    });
+    
+    // ─────────────────────────────
+// Auction Wizard
+// ─────────────────────────────
+
+let currentStep = 1;
+const totalSteps = 7;
+
+const wizardSteps = document.querySelectorAll('.wizard-step');
+const nextBtn = document.getElementById('wizard-next');
+const backBtn = document.getElementById('wizard-back');
+const createBtn = document.getElementById('wizard-create');
+
+const progressBar = document.getElementById('wizard-progress-bar');
+const stepLabel = document.getElementById('wizard-step-label');
+const pills = document.querySelectorAll('.wizard-pill');
+
+function showStep(step) {
+
+    currentStep = step;
+
+    // Toggle steps
+    wizardSteps.forEach(el => {
+
+        const elStep = Number(el.dataset.step);
+
+        if (elStep === step) {
+            el.classList.remove('hidden');
+        } else {
+            el.classList.add('hidden');
+        }
+
+    });
+
+    // Update pills
+    pills.forEach(pill => {
+
+        const pillStep = Number(pill.dataset.pill);
+
+        pill.classList.remove(
+            'border-primary',
+            'bg-primary/10',
+            'text-primary',
+            'font-medium'
+        );
+
+        pill.classList.add(
+            'border-border',
+            'text-muted-foreground'
+        );
+
+        if (pillStep === step) {
+
+            pill.classList.remove(
+                'border-border',
+                'text-muted-foreground'
+            );
+
+            pill.classList.add(
+                'border-primary',
+                'bg-primary/10',
+                'text-primary',
+                'font-medium'
+            );
+
+        }
+
+    });
+
+    // Buttons
+    backBtn.disabled = step === 1;
+
+    if (step === totalSteps) {
+
+        nextBtn.classList.add('hidden');
+        createBtn.classList.remove('hidden');
+
+    } else {
+
+        nextBtn.classList.remove('hidden');
+        createBtn.classList.add('hidden');
+
+    }
+
+    // Progress
+    const progress = (step / totalSteps) * 100;
+
+    progressBar.style.width = `${progress}%`;
+
+    stepLabel.innerText = `Step ${step} of ${totalSteps}`;
+
+}
+
+// Next
+nextBtn.addEventListener('click', () => {
+
+    if (currentStep < totalSteps) {
+
+        showStep(currentStep + 1);
+
+    }
 
 });
+
+// Back
+backBtn.addEventListener('click', () => {
+
+    if (currentStep > 1) {
+
+        showStep(currentStep - 1);
+
+    }
+
+});
+
+// Click pills
+pills.forEach(pill => {
+
+    pill.addEventListener('click', () => {
+
+        const step = Number(pill.dataset.pill);
+
+        showStep(step);
+
+    });
+
+});
+
+// Init
+showStep(1);
+
+});
+
 </script>
 @endpush
 @endsection
