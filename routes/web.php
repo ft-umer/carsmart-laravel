@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuctionsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ListingCreateController;
@@ -85,11 +86,20 @@ Route::prefix('valuations')->group(function () {
 
 Route::get('/qa', [QAController::class, 'index'])->name('qa.index');
 
-Route::get('/auctions',               fn() => view('stub', ['title' => 'Auctions']))->name('auctions.index');
-Route::get('/auctions/live',          fn() => view('stub', ['title' => 'Live Auctions']))->name('auctions.live');
-Route::get('/auctions/upcoming',      fn() => view('stub', ['title' => 'Upcoming Auctions']))->name('auctions.upcoming');
-Route::get('/auctions/closed',        fn() => view('stub', ['title' => 'Closed Auctions']))->name('auctions.closed');
-Route::get('/auctions/bids',          fn() => view('stub', ['title' => 'Bids']))->name('auctions.bids');
+Route::prefix('auctions')->group(function () {
+    Route::get('/', [AuctionsController::class, 'index'])->name('auctions.index');
+    Route::get('/{auction}', [AuctionsController::class, 'show'])->name('auctions.show');
+    Route::get('/{auction}/lots/{lot}', [AuctionsController::class, 'lotDetail'])
+        ->name('auctions.lots.detail');
+    Route::get('/auctions/live', [AuctionsController::class, 'live'])
+        ->name('auctions.live');
+        Route::get('/auctions/upcoming', [AuctionsController::class, 'upcoming'])
+    ->name('auctions.upcoming');
+    Route::get('/auctions/closed', [AuctionsController::class, 'closed'])
+    ->name('auctions.closed');
+    Route::get('/auctions/bids', [AuctionsController::class, 'bids'])
+    ->name('auctions.bids');
+});
 
 Route::get('/editions',               fn() => view('stub', ['title' => 'All Editions']))->name('editions.index');
 Route::get('/editions/create',        fn() => view('stub', ['title' => 'Create Edition']))->name('editions.create');

@@ -36,6 +36,7 @@
             'icon' => 'ki-price-tag',
             'route' => 'auctions.index',
             'children' => [
+                ['label' => 'All Auctions', 'route' => 'auctions.index'],
                 ['label' => 'Live Auctions', 'route' => 'auctions.live'],
                 ['label' => 'Upcoming', 'route' => 'auctions.upcoming'],
                 ['label' => 'Closed', 'route' => 'auctions.closed'],
