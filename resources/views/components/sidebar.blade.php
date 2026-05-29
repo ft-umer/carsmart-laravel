@@ -256,7 +256,7 @@
                                         @endphp
 
                                         <div class="kt-menu-item">
-                                            <a href="{{ route($child['route']) }}"
+                                           <a href="{{ Route::has($child['route']) ? route($child['route']) : '#' }}"
                                                 class="kt-menu-link flex items-center rounded-lg transition-all duration-200
                     {{ $childActive
                         ? 'bg-primary/10 text-primary font-semibold'

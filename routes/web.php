@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuctionsController;
+use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ListingCreateController;
@@ -58,11 +59,77 @@ Route::get('/dashboard/activity', fn() => view('dashboard'))->name('dashboard.ac
 // ── C2. CRM home ────────────────────────────────────────────────────────
 Route::get('/crm/inbox', fn() => view('crm.inbox'))->name('crm.inbox');
 
-// ── Stub routes for navigation (Phase 1+ will implement these) ──────────
-Route::get('/leads',                  fn() => view('stub', ['title' => 'All Leads']))->name('leads.index');
-Route::get('/leads/new',              fn() => view('stub', ['title' => 'New Leads']))->name('leads.new');
-Route::get('/leads/qualified',        fn() => view('stub', ['title' => 'Qualified Leads']))->name('leads.qualified');
-Route::get('/leads/archived',         fn() => view('stub', ['title' => 'Archived Leads']))->name('leads.archived');
+
+
+    /*
+    |------------------------------------------------------------------
+    | Leads
+    |------------------------------------------------------------------
+    */
+    Route::prefix('leads')->name('leads.')->group(function () {
+
+        // C1 — Browse / Pipeline (table + board)
+        Route::get('/',            [LeadsController::class, 'index'])->name('index');
+
+        // C2 — Create (quick add POST + full form GET/POST)
+        Route::get('/create',      [LeadsController::class, 'create'])->name('create');
+        Route::post('/',           [LeadsController::class, 'store'])->name('store');
+
+        // C3 — Lead Detail
+        Route::get('/{lead}',      [LeadsController::class, 'show'])->name('show');
+        Route::get('/{lead}/edit', [LeadsController::class, 'edit'])->name('edit');
+        Route::put('/{lead}',      [LeadsController::class, 'update'])->name('update');
+        Route::delete('/{lead}',   [LeadsController::class, 'destroy'])->name('destroy');
+
+        // Stage move (board drag / button)
+        Route::patch('/{lead}/stage',  [LeadsController::class, 'moveStage'])->name('stage');
+
+        // Owner assign
+        Route::patch('/{lead}/assign', [LeadsController::class, 'assign'])->name('assign');
+
+        // Convert to Listing / Customer
+        Route::post('/{lead}/convert-listing',  [LeadsController::class, 'convertToListing'])->name('convert.listing');
+        Route::post('/{lead}/convert-customer', [LeadsController::class, 'convertToCustomer'])->name('convert.customer');
+
+        // Mark Do-Not-Contact
+        Route::patch('/{lead}/dnc', [LeadsController::class, 'markDnc'])->name('dnc');
+
+        // Merge duplicate
+        Route::post('/{lead}/merge', [LeadsController::class, 'merge'])->name('merge');
+
+        /*
+        |--------------------------------------------------------------
+        | Valuations (Phase 3 update)
+        |--------------------------------------------------------------
+        */
+        Route::prefix('/{lead}/valuations')->name('valuations.')->group(function () {
+
+            // Pull latest valuation from provider (single lead)
+            Route::post('/pull',   [LeadsController::class, 'pullValuation'])->name('pull');
+
+            // Add manual valuation
+            Route::post('/',       [LeadsController::class, 'addValuation'])->name('store');
+
+            // Apply valuation to linked Listing
+            Route::post('/{valuation}/apply', [LeadsController::class, 'applyValuation'])->name('apply');
+        });
+
+        /*
+        |--------------------------------------------------------------
+        | Bulk actions (C1 — Leads index)
+        |--------------------------------------------------------------
+        */
+        Route::prefix('/bulk')->name('bulk.')->group(function () {
+            Route::post('/assign',          [LeadsController::class, 'bulkAssign'])->name('assign');
+            Route::post('/stage',           [LeadsController::class, 'bulkStage'])->name('stage');
+            Route::post('/message',         [LeadsController::class, 'bulkMessage'])->name('message');
+            Route::post('/task',            [LeadsController::class, 'bulkTask'])->name('task');
+            Route::post('/merge',           [LeadsController::class, 'bulkMerge'])->name('merge');
+            // Phase 3: Pull valuations for selected leads with VRM/VIN
+            Route::post('/pull-valuations', [LeadsController::class, 'bulkPullValuations'])->name('pull-valuations');
+        });
+    });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -93,12 +160,12 @@ Route::prefix('auctions')->group(function () {
         ->name('auctions.lots.detail');
     Route::get('/auctions/live', [AuctionsController::class, 'live'])
         ->name('auctions.live');
-        Route::get('/auctions/upcoming', [AuctionsController::class, 'upcoming'])
-    ->name('auctions.upcoming');
+    Route::get('/auctions/upcoming', [AuctionsController::class, 'upcoming'])
+        ->name('auctions.upcoming');
     Route::get('/auctions/closed', [AuctionsController::class, 'closed'])
-    ->name('auctions.closed');
+        ->name('auctions.closed');
     Route::get('/auctions/bids', [AuctionsController::class, 'bids'])
-    ->name('auctions.bids');
+        ->name('auctions.bids');
 });
 
 Route::get('/editions',               fn() => view('stub', ['title' => 'All Editions']))->name('editions.index');

@@ -20,7 +20,7 @@
                 <i class="ki-filled ki-pulse text-sm me-1.5"></i>
                 Live auctions
             </a>
-            <a href="{{ route('listings.create') }}" class="kt-btn kt-btn-primary kt-btn-sm">
+            <a href="#" class="kt-btn kt-btn-primary kt-btn-sm">
                 <i class="ki-filled ki-plus text-sm me-1.5"></i>
                 Create listing
             </a>

@@ -1,58 +1,90 @@
-<div class="space-y-4">
+<div class="space-y-6">
 
-    <h4 class="text-sm font-semibold">
-        Technical & Service
-    </h4>
+    <div>
+        <h3 class="text-lg font-semibold text-gray-900">
+            Documents & Compliance
+        </h3>
 
-    <div class="grid grid-cols-2 gap-3">
+        <p class="text-sm text-gray-500 mt-1">
+            Upload ownership and compliance documents.
+        </p>
+    </div>
 
-        <div>
-            <label class="block text-xs mb-1">
-                Mechanical Issues
+    {{-- Document Uploads --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="border rounded-2xl border-gray-200 p-5 bg-gray-50">
+            <label class="block text-sm font-semibold mb-3">
+                V5C Front Image
             </label>
-
-            <textarea
-            rows="3"
-            class="kt-input w-full"></textarea>
+            <input type="file" class="kt-input w-full">
         </div>
 
-        <div>
-            <label class="block text-xs mb-1">
-                Service Records
+        <div class="border rounded-2xl border-gray-200 p-5 bg-gray-50">
+            <label class="block text-sm font-semibold mb-3">
+                V5C Back Image
             </label>
-
-            <select class="kt-input w-full">
-
-                <option>No</option>
-                <option>Yes</option>
-
-            </select>
+            <input type="file" class="kt-input w-full">
         </div>
 
-        <div>
-            <label class="block text-xs mb-1">
-                Manuals
+        <div class="border rounded-2xl border-gray-200 p-5 bg-gray-50">
+            <label class="block text-sm font-semibold mb-3">
+                MOT Certificate
             </label>
-
-            <select class="kt-input w-full">
-
-                <option>No</option>
-                <option>Yes</option>
-
-            </select>
+            <input type="file" class="kt-input w-full">
         </div>
 
-        <div>
-            <label class="block text-xs mb-1">
-                Charging Cables
+        <div class="border rounded-2xl border-gray-200 p-5 bg-gray-50">
+            <label class="block text-sm font-semibold mb-3">
+                Service Receipts
+            </label>
+            <input type="file" class="kt-input w-full">
+        </div>
+
+        <div class="border rounded-2xl border-gray-200 p-5 bg-gray-50 md:col-span-2">
+            <label class="block text-sm font-semibold mb-3">
+                Other Proofs / Supporting Documents
             </label>
 
-            <select class="kt-input w-full">
+            <input type="file" multiple class="kt-input w-full">
 
-                <option>No</option>
-                <option>Yes</option>
+            <div class="text-xs text-gray-500 mt-2">
+                Maximum upload size: 25 MB per file.
+            </div>
+        </div>
 
-            </select>
+    </div>
+
+    {{-- Compliance --}}
+    <div class="border border-gray-200 rounded-2xl p-5">
+
+        <h4 class="text-sm font-semibold text-gray-900 mb-4">
+            Compliance Confirmation
+        </h4>
+
+        <div class="space-y-4">
+
+            <label class="flex items-start gap-3">
+                <input type="checkbox" class="mt-1">
+                <span class="text-sm text-gray-700">
+                    Seller consent obtained for vehicle listing and publication.
+                </span>
+            </label>
+
+            <label class="flex items-start gap-3">
+                <input type="checkbox" class="mt-1">
+                <span class="text-sm text-gray-700">
+                    Data and privacy notices accepted and internally recorded.
+                </span>
+            </label>
+
+            <label class="flex items-start gap-3">
+                <input type="checkbox" class="mt-1">
+                <span class="text-sm text-gray-700">
+                    Vehicle information verified before submission.
+                </span>
+            </label>
+
         </div>
 
     </div>
