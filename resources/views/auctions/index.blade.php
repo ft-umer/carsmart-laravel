@@ -247,5 +247,66 @@
 
 @push('scripts')
 <script src="{{ asset('js/auctions/auctions.js') }}"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const tabs = document.querySelectorAll('.view-tab-btn');
+
+    const listView = document.getElementById('view-list');
+    const calendarView = document.getElementById('view-calendar');
+
+    tabs.forEach(tab => {
+
+        tab.addEventListener('click', function () {
+
+            const view = this.dataset.view;
+
+            // reset tabs
+            tabs.forEach(btn => {
+                btn.classList.remove(
+                    'border-primary',
+                    'font-medium',
+                    'text-foreground'
+                );
+
+                btn.classList.add(
+                    'border-transparent',
+                    'text-muted-foreground'
+                );
+            });
+
+            // active tab
+            this.classList.remove(
+                'border-transparent',
+                'text-muted-foreground'
+            );
+
+            this.classList.add(
+                'border-primary',
+                'font-medium',
+                'text-foreground'
+            );
+
+            // switch views
+            if (view === 'calendar') {
+
+                listView.classList.add('hidden');
+                calendarView.classList.remove('hidden');
+
+            } else {
+
+                calendarView.classList.add('hidden');
+                listView.classList.remove('hidden');
+
+            }
+
+        });
+
+    });
+
+});
+</script>
 @endpush
 @endsection
