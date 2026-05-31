@@ -106,73 +106,161 @@
                     showStep(currentStep);
                 }
             });
-            
-            
+
+
         });
-        
     </script>
-    
+
     <script>
-document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
 
-    const listingModal = document.getElementById('listing-detail-modal');
-    const modalContent = document.getElementById('modal-content');
-    const quickModal = document.getElementById('quick-view-modal');
+            const listingModal = document.getElementById('listing-detail-modal');
+            const modalContent = document.getElementById('modal-content');
+            const quickModal = document.getElementById('quick-view-modal');
 
-    // =========================
-    // OPEN DETAIL (FETCH HTML)
-    // =========================
-    document.addEventListener('click', async (e) => {
+            // =========================
+            // OPEN DETAIL (FETCH HTML)
+            // =========================
+            document.addEventListener('click', async (e) => {
 
-        const btn = e.target.closest('.open-detail');
-        if (btn) {
+                const btn = e.target.closest('.open-detail');
+                if (btn) {
 
-            const id = btn.dataset.id;
+                    const id = btn.dataset.id;
 
-            // optional loading state
-            modalContent.innerHTML = `
+                    // optional loading state
+                    modalContent.innerHTML = `
                 <div class="p-6 text-sm text-muted-foreground">
                     Loading listing...
                 </div>
             `;
 
-            listingModal.classList.remove('hidden');
-            listingModal.classList.add('flex');
+                    listingModal.classList.remove('hidden');
+                    listingModal.classList.add('flex');
 
-            const res = await fetch(`/listings/${id}`);
-            const html = await res.text();
+                    const res = await fetch(`/listings/${id}`);
+                    const html = await res.text();
 
-            modalContent.innerHTML = html;
+                    modalContent.innerHTML = html;
 
-            return;
-        }
+                    return;
+                }
 
-        // QUICK VIEW (optional placeholder)
-        const quickBtn = e.target.closest('.quick-view');
-        if (quickBtn) {
+                // QUICK VIEW (optional placeholder)
+                const quickBtn = e.target.closest('.quick-view');
+                if (quickBtn) {
 
-            quickModal.classList.remove('hidden');
-            quickModal.classList.add('flex');
+                    quickModal.classList.remove('hidden');
+                    quickModal.classList.add('flex');
 
-            return;
-        }
+                    return;
+                }
 
-        // =========================
-        // CLOSE MODALS
-        // =========================
+                // =========================
+                // CLOSE MODALS
+                // =========================
 
-        if (
-            e.target.closest('.close-modal') ||
-            e.target.classList.contains('close-overlay')
-        ) {
-            listingModal.classList.add('hidden');
-            listingModal.classList.remove('flex');
+                if (
+                    e.target.closest('.close-modal') ||
+                    e.target.classList.contains('close-overlay')
+                ) {
+                    listingModal.classList.add('hidden');
+                    listingModal.classList.remove('flex');
 
-            quickModal?.classList.add('hidden');
-            quickModal?.classList.remove('flex');
-        }
+                    quickModal?.classList.add('hidden');
+                    quickModal?.classList.remove('flex');
+                }
+            });
+
+      document.addEventListener('click', function (e) {
+
+    const button = e.target.closest('[data-view]');
+    if (!button) return;
+
+    const view = button.dataset.view;
+
+    const views = [
+        'listings',
+        'qa',
+        'publication',
+        'valuations',
+        'exchange',
+        'lifecycle'
+    ];
+
+    views.forEach(v => {
+        document.getElementById(`view-${v}`)?.classList.add('hidden');
     });
 
+    document.getElementById(`view-${view}`)?.classList.remove('hidden');
+
+    document.querySelectorAll('[data-view]').forEach(btn => {
+        btn.classList.remove('kt-btn-mono');
+        btn.classList.add('kt-btn-ghost');
+    });
+
+    button.classList.remove('kt-btn-ghost');
+    button.classList.add('kt-btn-mono');
+
+    const isListings = view === 'listings';
+
+    document.getElementById('listings-title')
+        ?.classList.toggle('hidden', !isListings);
+
+    document.getElementById('listings-actions')
+        ?.classList.toggle('hidden', !isListings);
+
+    document.getElementById('listings-filters')
+        ?.classList.toggle('hidden', !isListings);
+});
+
+        });
+      
+    </script>
+    
+    <script>
+document.addEventListener('click', function(e) {
+
+    const tab = e.target.closest('.detail-tab');
+
+    if (!tab) return;
+
+    const container = tab.closest('.flex.flex-col');
+
+    const panes = container.querySelectorAll('[data-tab-pane]');
+    const tabs = container.querySelectorAll('.detail-tab');
+
+    const target = tab.dataset.tab;
+
+    panes.forEach(p => p.classList.add('hidden'));
+
+    tabs.forEach(t => {
+        t.classList.remove(
+            'bg-background',
+            'border',
+            'border-b-0',
+            'border-border'
+        );
+
+        t.classList.add('text-muted-foreground');
+    });
+
+    const activePane = container.querySelector(
+        `[data-tab-pane="${target}"]`
+    );
+
+    if (activePane) {
+        activePane.classList.remove('hidden');
+    }
+
+    tab.classList.add(
+        'bg-background',
+        'border',
+        'border-b-0',
+        'border-border'
+    );
+
+    tab.classList.remove('text-muted-foreground');
 });
 </script>
 @endpush

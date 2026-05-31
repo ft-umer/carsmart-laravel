@@ -136,22 +136,27 @@ Route::get('/crm/inbox', fn() => view('crm.inbox'))->name('crm.inbox');
 | Listings — Phase 1
 |--------------------------------------------------------------------------
 */
-// Listings routes
-Route::prefix('listings')->group(function () {
-    Route::get('/', [ListingController::class, 'index'])->name('listings.index');
-    Route::get('/create', [ListingCreateController::class, 'create'])->name('listings.create');
-    Route::post('/store', [ListingCreateController::class, 'store'])->name('listings.store');
-    Route::get('/{id}', [ListingDetailController::class, 'show'])->name('listings.show');
-});
 
-Route::prefix('valuations')->group(function () {
-    Route::get('/', [ValuationController::class, 'index'])->name('valuations.index');
-    Route::post('/pull/{id}', [ValuationController::class, 'pull'])->name('valuations.pull');
-    Route::post('/add/{id}', [ValuationController::class, 'add'])->name('valuations.add');
-    Route::post('/apply/{id}', [ValuationController::class, 'apply'])->name('valuations.apply');
-});
+// L0 — Index (Browse/Search)
+Route::get('/listings', [ListingController::class, 'index'])->name('listings.index');
 
-Route::get('/qa', [QAController::class, 'index'])->name('qa.index');
+// L1 — Create wizard
+Route::post('/listings', [ListingController::class, 'store'])->name('listings.store');
+
+// L2 — Detail (AJAX partial for modal)
+Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings.show');
+
+// L8 — State transitions
+Route::post('/listings/{id}/transition', [ListingController::class, 'transition'])->name('listings.transition');
+
+// L7 — Bulk actions
+Route::post('/listings/bulk', [ListingController::class, 'bulk'])->name('listings.bulk');
+
+// L4 — Valuations module
+Route::get('/valuations', [ValuationController::class, 'index'])->name('valuations.index');
+Route::post('/listings/{listingId}/valuations', [ValuationController::class, 'store'])->name('valuations.store');
+Route::post('/listings/{listingId}/valuations/pull', [ValuationController::class, 'pull'])->name('valuations.pull');
+Route::post('/listings/{listingId}/valuations/apply', [ValuationController::class, 'apply'])->name('valuations.apply');
 
 Route::prefix('auctions')->group(function () {
     Route::get('/', [AuctionsController::class, 'index'])->name('auctions.index');
