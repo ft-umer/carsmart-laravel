@@ -85,20 +85,86 @@ class AuctionsController extends Controller
     return view('auctions.index', compact('auctions'));
 }
 
-    public function show($auction)
-    {
-        $auctionData = [
-            'id' => $auction,
-            'title' => 'Premium Vehicle Auction',
-            'status' => 'Live',
-            'owner' => 'Admin',
-            'total_lots' => 48,
-            'active_bidders' => 14,
-        ];
+public function show($auction)
+{
+    $auctionData = [
+        'id' => $auction,
+        'ref' => 'AUC-' . str_pad($auction, 5, '0', STR_PAD_LEFT),
+        'title' => 'Premium Vehicle Auction',
+        'status' => 'Live',
+        'visibility' => 'Public',
+        'owner' => 'Trade Auto Group',
+        'total_lots' => 48,
+        'active_bidders' => 14,
+        'reserve_met' => '78%',
+        'start_date' => '2026-05-29 10:00 AM',
+        'end_date' => '2026-05-29 06:00 PM',
 
-        return view('auctions.detail', compact('auctionData'));
-    }
+        'lots' => [
+            [
+                'id' => 101,
+                'vehicle' => '2024 Mercedes S580',
+                'current_bid' => '$124,500',
+                'state' => 'Live',
+            ],
+            [
+                'id' => 102,
+                'vehicle' => '2023 BMW X7',
+                'current_bid' => '$89,000',
+                'state' => 'Reserve Met',
+            ],
+            [
+                'id' => 103,
+                'vehicle' => '2024 Range Rover',
+                'current_bid' => '$136,000',
+                'state' => 'Ended',
+            ],
+        ],
 
+        'participants' => [
+            [
+                'name' => 'Trade Auto Group',
+                'status' => 'Active',
+                'bids' => 18,
+            ],
+            [
+                'name' => 'Prestige Motors',
+                'status' => 'Watching',
+                'bids' => 9,
+            ],
+        ],
+
+        'bid_feed' => [
+            [
+                'time' => '12:15 PM',
+                'participant' => 'Trade Auto Group',
+                'amount' => '$124,500',
+            ],
+            [
+                'time' => '12:12 PM',
+                'participant' => 'Prestige Motors',
+                'amount' => '$121,000',
+            ],
+        ],
+
+        'activity' => [
+            [
+                'date' => '2026-05-29 10:00',
+                'description' => 'Auction opened',
+            ],
+            [
+                'date' => '2026-05-29 10:30',
+                'description' => 'Lot #101 reserve met',
+            ],
+            [
+                'date' => '2026-05-29 11:15',
+                'description' => 'New bidder joined',
+            ],
+        ],
+    ];
+
+    return view('auctions.show', compact('auctionData'));
+}
     public function lotDetail($auction, $lot)
     {
         $lotData = [

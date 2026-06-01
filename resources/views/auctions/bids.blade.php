@@ -5,7 +5,17 @@
 @section('content')
 
 <section class="kt-container-fixed px-4 lg:px-6 py-6">
+<nav class="flex items-center gap-1.5 text-xs text-muted-foreground mb-4">
+    <a href="{{ route('auctions.index') }}" class="hover:text-foreground">
+        Auctions
+    </a>
 
+    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+
+    <span class="text-foreground font-medium">
+        Bids
+    </span>
+</nav>
     {{-- Header --}}
     <div class="flex items-center justify-between mb-5">
         <div>

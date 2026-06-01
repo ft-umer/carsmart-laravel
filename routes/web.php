@@ -3,10 +3,19 @@
 use App\Http\Controllers\AuctionsController;
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DealsController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ListingCreateController;
 use App\Http\Controllers\ListingDetailController;
+use App\Http\Controllers\ChargesController;
+use App\Http\Controllers\DisputesController;
+use App\Http\Controllers\LogisticsJobsController;
+use App\Http\Controllers\LogisticsQuotesController;
+use App\Http\Controllers\PaymentMethodsController;
+use App\Http\Controllers\PayoutsController;
+use App\Http\Controllers\WalletsController;
 use App\Http\Controllers\QAController;
+use App\Http\Controllers\ReconciliationController;
 use App\Http\Controllers\ValuationController;
 use Illuminate\Support\Facades\Route;
 
@@ -61,74 +70,74 @@ Route::get('/crm/inbox', fn() => view('crm.inbox'))->name('crm.inbox');
 
 
 
-    /*
+/*
     |------------------------------------------------------------------
     | Leads
     |------------------------------------------------------------------
     */
-    Route::prefix('leads')->name('leads.')->group(function () {
+Route::prefix('leads')->name('leads.')->group(function () {
 
-        // C1 — Browse / Pipeline (table + board)
-        Route::get('/',            [LeadsController::class, 'index'])->name('index');
+    // C1 — Browse / Pipeline (table + board)
+    Route::get('/',            [LeadsController::class, 'index'])->name('index');
 
-        // C2 — Create (quick add POST + full form GET/POST)
-        Route::get('/create',      [LeadsController::class, 'create'])->name('create');
-        Route::post('/',           [LeadsController::class, 'store'])->name('store');
+    // C2 — Create (quick add POST + full form GET/POST)
+    Route::get('/create',      [LeadsController::class, 'create'])->name('create');
+    Route::post('/',           [LeadsController::class, 'store'])->name('store');
 
-        // C3 — Lead Detail
-        Route::get('/{lead}',      [LeadsController::class, 'show'])->name('show');
-        Route::get('/{lead}/edit', [LeadsController::class, 'edit'])->name('edit');
-        Route::put('/{lead}',      [LeadsController::class, 'update'])->name('update');
-        Route::delete('/{lead}',   [LeadsController::class, 'destroy'])->name('destroy');
+    // C3 — Lead Detail
+    Route::get('/{lead}',      [LeadsController::class, 'show'])->name('show');
+    Route::get('/{lead}/edit', [LeadsController::class, 'edit'])->name('edit');
+    Route::put('/{lead}',      [LeadsController::class, 'update'])->name('update');
+    Route::delete('/{lead}',   [LeadsController::class, 'destroy'])->name('destroy');
 
-        // Stage move (board drag / button)
-        Route::patch('/{lead}/stage',  [LeadsController::class, 'moveStage'])->name('stage');
+    // Stage move (board drag / button)
+    Route::patch('/{lead}/stage',  [LeadsController::class, 'moveStage'])->name('stage');
 
-        // Owner assign
-        Route::patch('/{lead}/assign', [LeadsController::class, 'assign'])->name('assign');
+    // Owner assign
+    Route::patch('/{lead}/assign', [LeadsController::class, 'assign'])->name('assign');
 
-        // Convert to Listing / Customer
-        Route::post('/{lead}/convert-listing',  [LeadsController::class, 'convertToListing'])->name('convert.listing');
-        Route::post('/{lead}/convert-customer', [LeadsController::class, 'convertToCustomer'])->name('convert.customer');
+    // Convert to Listing / Customer
+    Route::post('/{lead}/convert-listing',  [LeadsController::class, 'convertToListing'])->name('convert.listing');
+    Route::post('/{lead}/convert-customer', [LeadsController::class, 'convertToCustomer'])->name('convert.customer');
 
-        // Mark Do-Not-Contact
-        Route::patch('/{lead}/dnc', [LeadsController::class, 'markDnc'])->name('dnc');
+    // Mark Do-Not-Contact
+    Route::patch('/{lead}/dnc', [LeadsController::class, 'markDnc'])->name('dnc');
 
-        // Merge duplicate
-        Route::post('/{lead}/merge', [LeadsController::class, 'merge'])->name('merge');
+    // Merge duplicate
+    Route::post('/{lead}/merge', [LeadsController::class, 'merge'])->name('merge');
 
-        /*
+    /*
         |--------------------------------------------------------------
         | Valuations (Phase 3 update)
         |--------------------------------------------------------------
         */
-        Route::prefix('/{lead}/valuations')->name('valuations.')->group(function () {
+    Route::prefix('/{lead}/valuations')->name('valuations.')->group(function () {
 
-            // Pull latest valuation from provider (single lead)
-            Route::post('/pull',   [LeadsController::class, 'pullValuation'])->name('pull');
+        // Pull latest valuation from provider (single lead)
+        Route::post('/pull',   [LeadsController::class, 'pullValuation'])->name('pull');
 
-            // Add manual valuation
-            Route::post('/',       [LeadsController::class, 'addValuation'])->name('store');
+        // Add manual valuation
+        Route::post('/',       [LeadsController::class, 'addValuation'])->name('store');
 
-            // Apply valuation to linked Listing
-            Route::post('/{valuation}/apply', [LeadsController::class, 'applyValuation'])->name('apply');
-        });
+        // Apply valuation to linked Listing
+        Route::post('/{valuation}/apply', [LeadsController::class, 'applyValuation'])->name('apply');
+    });
 
-        /*
+    /*
         |--------------------------------------------------------------
         | Bulk actions (C1 — Leads index)
         |--------------------------------------------------------------
         */
-        Route::prefix('/bulk')->name('bulk.')->group(function () {
-            Route::post('/assign',          [LeadsController::class, 'bulkAssign'])->name('assign');
-            Route::post('/stage',           [LeadsController::class, 'bulkStage'])->name('stage');
-            Route::post('/message',         [LeadsController::class, 'bulkMessage'])->name('message');
-            Route::post('/task',            [LeadsController::class, 'bulkTask'])->name('task');
-            Route::post('/merge',           [LeadsController::class, 'bulkMerge'])->name('merge');
-            // Phase 3: Pull valuations for selected leads with VRM/VIN
-            Route::post('/pull-valuations', [LeadsController::class, 'bulkPullValuations'])->name('pull-valuations');
-        });
+    Route::prefix('/bulk')->name('bulk.')->group(function () {
+        Route::post('/assign',          [LeadsController::class, 'bulkAssign'])->name('assign');
+        Route::post('/stage',           [LeadsController::class, 'bulkStage'])->name('stage');
+        Route::post('/message',         [LeadsController::class, 'bulkMessage'])->name('message');
+        Route::post('/task',            [LeadsController::class, 'bulkTask'])->name('task');
+        Route::post('/merge',           [LeadsController::class, 'bulkMerge'])->name('merge');
+        // Phase 3: Pull valuations for selected leads with VRM/VIN
+        Route::post('/pull-valuations', [LeadsController::class, 'bulkPullValuations'])->name('pull-valuations');
     });
+});
 
 
 /*
@@ -159,8 +168,10 @@ Route::post('/listings/{listingId}/valuations/pull', [ValuationController::class
 Route::post('/listings/{listingId}/valuations/apply', [ValuationController::class, 'apply'])->name('valuations.apply');
 
 Route::prefix('auctions')->group(function () {
-    Route::get('/', [AuctionsController::class, 'index'])->name('auctions.index');
-    Route::get('/{auction}', [AuctionsController::class, 'show'])->name('auctions.show');
+    Route::get('/', [AuctionsController::class, 'index'])
+        ->name('auctions.index');
+    Route::get('/{auction}', [AuctionsController::class, 'show'])
+        ->name('auctions.show');
     Route::get('/{auction}/lots/{lot}', [AuctionsController::class, 'lotDetail'])
         ->name('auctions.lots.detail');
     Route::get('/auctions/live', [AuctionsController::class, 'live'])
@@ -177,31 +188,83 @@ Route::get('/editions',               fn() => view('stub', ['title' => 'All Edit
 Route::get('/editions/create',        fn() => view('stub', ['title' => 'Create Edition']))->name('editions.create');
 Route::get('/editions/schedules',     fn() => view('stub', ['title' => 'Edition Schedules']))->name('editions.schedules');
 
-Route::get('/vendors',                fn() => view('stub', ['title' => 'Vendor Directory']))->name('vendors.index');
-Route::get('/vendors/applications',   fn() => view('stub', ['title' => 'Vendor Applications']))->name('vendors.applications');
-Route::get('/vendors/performance',    fn() => view('stub', ['title' => 'Vendor Performance']))->name('vendors.performance');
-
+Route::get('/vendors',                [WalletsController::class, 'index'])->name('vendors.index');
 Route::get('/customers',              fn() => view('stub', ['title' => 'Customer List']))->name('customers.index');
 Route::get('/customers/segments',     fn() => view('stub', ['title' => 'Customer Segments']))->name('customers.segments');
 Route::get('/customers/support',      fn() => view('stub', ['title' => 'Support Requests']))->name('customers.support');
 Route::get('/customers/history',      fn() => view('stub', ['title' => 'Purchase History']))->name('customers.history');
 
-Route::get('/payments',               fn() => view('stub', ['title' => 'Payments']))->name('payments.index');
-Route::get('/payments/transactions',  fn() => view('stub', ['title' => 'Transactions']))->name('payments.transactions');
-Route::get('/payments/invoices',      fn() => view('stub', ['title' => 'Invoices']))->name('payments.invoices');
-Route::get('/payments/refunds',       fn() => view('stub', ['title' => 'Refunds']))->name('payments.refunds');
-Route::get('/payments/payouts',       fn() => view('stub', ['title' => 'Payout Requests']))->name('payments.payouts');
 
-Route::get('/logistics',              fn() => view('stub', ['title' => 'Logistics']))->name('logistics.index');
-Route::get('/logistics/shipments',    fn() => view('stub', ['title' => 'Shipments']))->name('logistics.shipments');
-Route::get('/logistics/tracking',     fn() => view('stub', ['title' => 'Tracking']))->name('logistics.tracking');
-Route::get('/logistics/warehouses',   fn() => view('stub', ['title' => 'Warehouses']))->name('logistics.warehouses');
-Route::get('/logistics/status',       fn() => view('stub', ['title' => 'Delivery Status']))->name('logistics.status');
+// ── DEALS ─────────────────────────────────────────────────────────────────────
+Route::prefix('deals')->name('deals.')->group(function () {
+    Route::get('/',                    [DealsController::class, 'index'])->name('index');
+    Route::get('/create',              [DealsController::class, 'create'])->name('create');
+    Route::post('/',                   [DealsController::class, 'store'])->name('store');
+    Route::get('/{deal}',              [DealsController::class, 'show'])->name('show');
+    Route::get('/{deal}/edit',         [DealsController::class, 'edit'])->name('edit');
+    Route::patch('/{deal}',            [DealsController::class, 'update'])->name('update');
+    Route::delete('/{deal}',           [DealsController::class, 'destroy'])->name('destroy');
+});
 
-Route::get('/disputes',               fn() => view('stub', ['title' => 'Disputes']))->name('disputes.index');
-Route::get('/disputes/open',          fn() => view('stub', ['title' => 'Open Cases']))->name('disputes.open');
-Route::get('/disputes/resolved',      fn() => view('stub', ['title' => 'Resolved Cases']))->name('disputes.resolved');
-Route::get('/disputes/escalations',   fn() => view('stub', ['title' => 'Escalations']))->name('disputes.escalations');
+// ── PAYMENTS ──────────────────────────────────────────────────────────────────
+Route::prefix('payments')->name('payments.')->group(function () {
+
+    // Charges & Fees (P1)
+    Route::get('/charges',             [ChargesController::class, 'index'])->name('charges');
+
+    // Wallets (P2)
+    Route::prefix('wallets')->name('wallets.')->group(function () {
+        Route::get('/',                [WalletsController::class, 'index'])->name('index');
+        Route::get('/{wallet}',        [WalletsController::class, 'show'])->name('show');
+    });
+
+    // Payment Methods / Cards on file (P3)
+    Route::get('/methods',             [PaymentMethodsController::class, 'index'])->name('methods');
+
+    // Payout Approvals (P4)
+    Route::get('/payouts',             [PayoutsController::class, 'index'])->name('payouts');
+    Route::post('/payouts/{payout}/approve', [PayoutsController::class, 'approve'])->name('payouts.approve');
+    Route::post('/payouts/{payout}/reject',  [PayoutsController::class, 'reject'])->name('payouts.reject');
+
+    // Reconciliation (P5)
+    Route::get('/reconciliation',      [ReconciliationController::class, 'index'])->name('reconciliation');
+    Route::post('/reconciliation/run', [ReconciliationController::class, 'run'])->name('reconciliation.run');
+});
+
+// ── LOGISTICS ─────────────────────────────────────────────────────────────────
+Route::prefix('logistics')->name('logistics.')->group(function () {
+
+    // Quotes (L1)
+    Route::get('/quotes',              [LogisticsQuotesController::class, 'index'])->name('quotes');
+
+    // Jobs (L2/L3/L4)
+    Route::prefix('jobs')->name('jobs.')->group(function () {
+        Route::get('/',                [LogisticsJobsController::class, 'index'])->name('index');
+        Route::get('/create',          [LogisticsJobsController::class, 'create'])->name('create');
+        Route::post('/',               [LogisticsJobsController::class, 'store'])->name('store');
+        Route::get('/{job}',           [LogisticsJobsController::class, 'show'])->name('show');
+        Route::patch('/{job}',         [LogisticsJobsController::class, 'update'])->name('update');
+        Route::post('/{job}/transit',  [LogisticsJobsController::class, 'markInTransit'])->name('transit');
+        Route::post('/{job}/deliver',  [LogisticsJobsController::class, 'markDelivered'])->name('deliver');
+        Route::post('/{job}/handover', [LogisticsJobsController::class, 'confirmHandover'])->name('handover');
+        Route::post('/{job}/chat',     [LogisticsJobsController::class, 'sendChatMessage'])->name('chat');
+    });
+});
+
+// ── DISPUTES ──────────────────────────────────────────────────────────────────
+Route::prefix('disputes')->name('disputes.')->group(function () {
+    Route::get('/',                    [DisputesController::class, 'index'])->name('index');
+    Route::get('/create',              [DisputesController::class, 'create'])->name('create');
+    Route::post('/',                   [DisputesController::class, 'store'])->name('store');
+    Route::get('/{dispute}',           [DisputesController::class, 'show'])->name('show');
+    Route::patch('/{dispute}',         [DisputesController::class, 'update'])->name('update');
+    Route::post('/{dispute}/ack',      [DisputesController::class, 'sendAck'])->name('ack');
+    Route::post('/{dispute}/outcome',  [DisputesController::class, 'decideOutcome'])->name('outcome');
+    Route::post('/{dispute}/charge',   [DisputesController::class, 'applyCharge'])->name('charge');
+    Route::post('/{dispute}/close',    [DisputesController::class, 'close'])->name('close');
+    Route::post('/{dispute}/escalate', [DisputesController::class, 'escalate'])->name('escalate');
+});
+Route::get('/disputes/escalations', [DisputesController::class, 'escalations'])->name('disputes.escalations');
 
 Route::get('/content',                fn() => view('stub', ['title' => 'Content Management']))->name('cms.index');
 Route::get('/content/pages',          fn() => view('stub', ['title' => 'Pages']))->name('cms.pages');

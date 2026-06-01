@@ -57,11 +57,7 @@
             'label' => 'Vendors',
             'icon' => 'ki-shop',
             'route' => 'vendors.index',
-            'children' => [
-                ['label' => 'Vendor Directory', 'route' => 'vendors.index'],
-                ['label' => 'Applications', 'route' => 'vendors.applications'],
-                ['label' => 'Performance', 'route' => 'vendors.performance'],
-            ],
+            'children' => [['label' => 'Vendor Directory', 'route' => 'vendors.index']],
         ],
         [
             'label' => 'Customers',
@@ -79,10 +75,10 @@
             'icon' => 'ki-dollar',
             'route' => 'payments.index',
             'children' => [
-                ['label' => 'Transactions', 'route' => 'payments.transactions'],
-                ['label' => 'Invoices', 'route' => 'payments.invoices'],
-                ['label' => 'Refunds', 'route' => 'payments.refunds'],
+                ['label' => 'Charges & Fee', 'route' => 'payments.charges'],
+                ['label' => 'Methods', 'route' => 'payments.methods'],
                 ['label' => 'Payouts', 'route' => 'payments.payouts'],
+                ['label' => 'Reconciliation', 'route' => 'payments.reconciliation'],
             ],
         ],
         [
@@ -90,10 +86,8 @@
             'icon' => 'ki-delivery',
             'route' => 'logistics.index',
             'children' => [
-                ['label' => 'Shipments', 'route' => 'logistics.shipments'],
-                ['label' => 'Tracking', 'route' => 'logistics.tracking'],
-                ['label' => 'Warehouses', 'route' => 'logistics.warehouses'],
-                ['label' => 'Delivery Status', 'route' => 'logistics.status'],
+                ['label' => 'Quotes', 'route' => 'logistics.quotes'],
+                ['label' => 'Jobs', 'route' => 'logistics.jobs.index'],
             ],
         ],
         [
@@ -101,10 +95,18 @@
             'icon' => 'ki-shield-cross',
             'route' => 'disputes.index',
             'children' => [
-                ['label' => 'Open Cases', 'route' => 'disputes.open'],
-                ['label' => 'Resolved', 'route' => 'disputes.resolved'],
-                ['label' => 'Escalations', 'route' => 'disputes.escalations'],
+                [
+                    'label' => 'Queue',
+                    'route' => 'disputes.index',
+                ],
             ],
+        ],
+
+        [
+            'label' => 'Deals',
+            'icon' => 'ki-shield-cross',
+            'route' => 'deals.index',
+            'children' => [['label' => 'Overview', 'route' => 'deals.index']],
         ],
         [
             'label' => 'Content Management',
@@ -256,7 +258,7 @@
                                         @endphp
 
                                         <div class="kt-menu-item">
-                                           <a href="{{ Route::has($child['route']) ? route($child['route']) : '#' }}"
+                                            <a href="{{ Route::has($child['route']) ? route($child['route']) : '#' }}"
                                                 class="kt-menu-link flex items-center rounded-lg transition-all duration-200
                     {{ $childActive
                         ? 'bg-primary/10 text-primary font-semibold'
