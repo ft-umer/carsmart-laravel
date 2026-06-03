@@ -1,37 +1,33 @@
-{{-- resources/views/partials/_retention_banner.blade.php --}}
-{{-- G1: 12-month data-retention notice + Include-archived toggle (appears on all Phase-4 indexes) --}}
 
-@php
-    $retentionMonths = config('carsmart.retention_months', 12);
-    $includeArchived = request()->boolean('include_archived', false);
-@endphp
-
-<div class="kt-container-fixed">
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2
-            px-4 py-2.5 mb-4 rounded-lg
-            bg-amber-50 dark:bg-amber-900/20
-            border border-amber-200 dark:border-amber-700
-            text-amber-800 dark:text-amber-300 text-xs">
-    <div class="flex items-center gap-2">
-        <i data-lucide="shield" class="w-3.5 h-3.5 shrink-0"></i>
-        <span>
-            Data shown covers the last <strong>{{ $retentionMonths }} months</strong> per retention policy.
-            Older records are archived and accessible only to Administrators.
-        </span>
+@if(isset($retentionWarning) && $retentionWarning)
+<div class="mb-4 rounded-lg border border-warning/40 bg-warning/5 px-4 py-3 flex items-start gap-3" role="alert">
+    <i data-lucide="clock" class="w-4 h-4 text-warning shrink-0 mt-0.5"></i>
+    <div class="flex-1 text-sm">
+        <span class="font-semibold text-warning">Retention notice:</span>
+        <span class="text-muted-foreground ml-1">{{ $retentionWarning }}</span>
     </div>
-    <label class="flex items-center gap-2 cursor-pointer shrink-0">
-        <input type="checkbox"
-               class="form-checkbox rounded"
-               name="include_archived"
-               value="1"
-               {{ $includeArchived ? 'checked' : '' }}
-               onchange="
-                   const url = new URL(window.location.href);
-                   this.checked ? url.searchParams.set('include_archived','1')
-                                : url.searchParams.delete('include_archived');
-                   window.location.href = url.toString();
-               " />
-        <span class="font-medium">Include archived</span>
-    </label>
+    <button class="text-muted-foreground hover:text-foreground shrink-0"
+            onclick="this.closest('[role=alert]').remove()" aria-label="Dismiss">
+        <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
 </div>
+@endif
+
+@if(config('carsmart.show_retention_banner', false))
+<div class="mb-4 rounded-lg border border-info/30 bg-info/5 px-4 py-3 flex items-start gap-3" role="alert" id="retention-policy-banner">
+    <i data-lucide="shield" class="w-4 h-4 text-info shrink-0 mt-0.5"></i>
+    <div class="flex-1 text-sm text-muted-foreground">
+        Records are retained for
+        <strong class="text-foreground">{{ config('carsmart.retention_months', 12) }} months</strong>
+        per the platform's
+        <a href="{{ route('settings.privacy') }}" class="text-primary underline hover:no-underline">data retention policy</a>.
+        Archived records are
+        <strong class="text-foreground">{{ config('carsmart.include_archived_default', false) ? 'included' : 'excluded' }}</strong>
+        by default.
+    </div>
+    <button class="text-muted-foreground hover:text-foreground shrink-0"
+            onclick="this.closest('[role=alert]').remove()" aria-label="Dismiss">
+        <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
 </div>
+@endif

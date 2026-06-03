@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuctionsController;
+use App\Http\Controllers\AutomationsController;
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DealsController;
@@ -8,14 +9,19 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ListingCreateController;
 use App\Http\Controllers\ListingDetailController;
 use App\Http\Controllers\ChargesController;
+use App\Http\Controllers\CmsController;
 use App\Http\Controllers\DisputesController;
 use App\Http\Controllers\LogisticsJobsController;
 use App\Http\Controllers\LogisticsQuotesController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\PaymentMethodsController;
 use App\Http\Controllers\PayoutsController;
 use App\Http\Controllers\WalletsController;
 use App\Http\Controllers\QAController;
 use App\Http\Controllers\ReconciliationController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TasksController;
 use App\Http\Controllers\ValuationController;
 use Illuminate\Support\Facades\Route;
 
@@ -152,14 +158,16 @@ Route::get('/listings', [ListingController::class, 'index'])->name('listings.ind
 // L1 — Create wizard
 Route::post('/listings', [ListingController::class, 'store'])->name('listings.store');
 
+
+// L7 — Bulk actions
+Route::post('/listings/bulk', [ListingController::class, 'bulk'])->name('listings.bulk');
+
 // L2 — Detail (AJAX partial for modal)
 Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings.show');
 
 // L8 — State transitions
 Route::post('/listings/{id}/transition', [ListingController::class, 'transition'])->name('listings.transition');
 
-// L7 — Bulk actions
-Route::post('/listings/bulk', [ListingController::class, 'bulk'])->name('listings.bulk');
 
 // L4 — Valuations module
 Route::get('/valuations', [ValuationController::class, 'index'])->name('valuations.index');
@@ -168,20 +176,27 @@ Route::post('/listings/{listingId}/valuations/pull', [ValuationController::class
 Route::post('/listings/{listingId}/valuations/apply', [ValuationController::class, 'apply'])->name('valuations.apply');
 
 Route::prefix('auctions')->group(function () {
+
     Route::get('/', [AuctionsController::class, 'index'])
         ->name('auctions.index');
+
+    Route::get('/live', [AuctionsController::class, 'live'])
+        ->name('auctions.live');
+
+    Route::get('/upcoming', [AuctionsController::class, 'upcoming'])
+        ->name('auctions.upcoming');
+
+    Route::get('/closed', [AuctionsController::class, 'closed'])
+        ->name('auctions.closed');
+
+    Route::get('/bids', [AuctionsController::class, 'bids'])
+        ->name('auctions.bids');
+
     Route::get('/{auction}', [AuctionsController::class, 'show'])
         ->name('auctions.show');
+
     Route::get('/{auction}/lots/{lot}', [AuctionsController::class, 'lotDetail'])
         ->name('auctions.lots.detail');
-    Route::get('/auctions/live', [AuctionsController::class, 'live'])
-        ->name('auctions.live');
-    Route::get('/auctions/upcoming', [AuctionsController::class, 'upcoming'])
-        ->name('auctions.upcoming');
-    Route::get('/auctions/closed', [AuctionsController::class, 'closed'])
-        ->name('auctions.closed');
-    Route::get('/auctions/bids', [AuctionsController::class, 'bids'])
-        ->name('auctions.bids');
 });
 
 Route::get('/editions',               fn() => view('stub', ['title' => 'All Editions']))->name('editions.index');
@@ -272,34 +287,212 @@ Route::get('/content/blogs',          fn() => view('stub', ['title' => 'Blogs'])
 Route::get('/content/media',          fn() => view('stub', ['title' => 'Media Library']))->name('cms.media');
 Route::get('/content/seo',            fn() => view('stub', ['title' => 'SEO']))->name('cms.seo');
 
-Route::get('/automations',            fn() => view('stub', ['title' => 'Automations']))->name('automations.index');
-Route::get('/automations/workflows',  fn() => view('stub', ['title' => 'Workflows']))->name('automations.workflows');
-Route::get('/automations/email',      fn() => view('stub', ['title' => 'Email Automation']))->name('automations.email');
-Route::get('/automations/triggers',   fn() => view('stub', ['title' => 'Triggers']))->name('automations.triggers');
-Route::get('/automations/scheduled',  fn() => view('stub', ['title' => 'Scheduled Tasks']))->name('automations.scheduled');
 
-Route::get('/reports',                fn() => view('stub', ['title' => 'Reports']))->name('reports.index');
-Route::get('/reports/sales',          fn() => view('stub', ['title' => 'Sales Reports']))->name('reports.sales');
-Route::get('/reports/users',          fn() => view('stub', ['title' => 'User Reports']))->name('reports.users');
-Route::get('/reports/auctions',       fn() => view('stub', ['title' => 'Auction Reports']))->name('reports.auctions');
-Route::get('/reports/exports',        fn() => view('stub', ['title' => 'Exports']))->name('reports.exports');
+// ──────────────────────────────────────────────────────────────────────────
+// CMS
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('cms')->name('cms.')->group(function () {
 
-Route::get('/settings',               fn() => view('stub', ['title' => 'Settings']))->name('settings.index');
-Route::get('/settings/general',       fn() => view('stub', ['title' => 'General Settings']))->name('settings.general');
-Route::get('/settings/users',         fn() => view('stub', ['title' => 'Users and Roles']))->name('settings.users');
-Route::get('/settings/integrations',  fn() => view('stub', ['title' => 'Integrations']))->name('settings.integrations');
-Route::get('/settings/security',      fn() => view('stub', ['title' => 'Security Settings']))->name('settings.security');
+    // Library / overview
+    Route::get('/',           [CmsController::class, 'index'])->name('index');
 
-Route::get('/notifications',          fn() => view('stub', ['title' => 'Notifications']))->name('notifications.index');
-Route::get('/notifications/inbox',    fn() => view('stub', ['title' => 'Notification Inbox']))->name('notifications.inbox');
-Route::get('/notifications/templates', fn() => view('stub', ['title' => 'Notification Templates']))->name('notifications.templates');
-Route::get('/notifications/preferences', fn() => view('stub', ['title' => 'Notification Preferences']))->name('notifications.preferences');
+    // Pages
+    Route::get('/pages/create', [CmsController::class, 'createPage'])->name('pages.create');
+    Route::post('/pages',       [CmsController::class, 'storePage'])->name('pages.store');
 
-Route::get('/tasks',                  fn() => view('stub', ['title' => 'Tasks']))->name('tasks.index');
-Route::get('/tasks/mine',             fn() => view('stub', ['title' => 'My Tasks']))->name('tasks.mine');
-Route::get('/tasks/team',             fn() => view('stub', ['title' => 'Team Tasks']))->name('tasks.team');
-Route::get('/tasks/completed',        fn() => view('stub', ['title' => 'Completed Tasks']))->name('tasks.completed');
+    // Posts
+    Route::get('/posts/create', [CmsController::class, 'createPost'])->name('posts.create');
+    Route::post('/posts',       [CmsController::class, 'storePost'])->name('posts.store');
 
+    // Editor (shared for pages & posts)
+    Route::get('/{cms}/edit',   [CmsController::class, 'edit'])->name('edit');
+    Route::patch('/{cms}',      [CmsController::class, 'update'])->name('update');
+    Route::delete('/{cms}',     [CmsController::class, 'destroy'])->name('destroy');
+
+    // Publish / schedule / archive actions
+    Route::patch('/{cms}/publish',  [CmsController::class, 'publish'])->name('publish');
+    Route::patch('/{cms}/schedule', [CmsController::class, 'schedule'])->name('schedule');
+    Route::patch('/{cms}/archive',  [CmsController::class, 'archive'])->name('archive');
+
+    // Preview
+    Route::get('/{cms}/preview', [CmsController::class, 'preview'])->name('preview');
+
+    // Version history
+    Route::get('/{cms}/versions',             [CmsController::class, 'versions'])->name('versions');
+    Route::post('/{cms}/versions/{version}/rollback', [CmsController::class, 'rollback'])->name('rollback');
+
+    // Banners & Features
+    Route::get('/banners',            [CmsController::class, 'banners'])->name('banners');
+    Route::post('/banners',           [CmsController::class, 'storeFeature'])->name('banners.store');
+    Route::patch('/banners/{feature}', [CmsController::class, 'updateFeature'])->name('banners.update');
+    Route::delete('/banners/{feature}', [CmsController::class, 'destroyFeature'])->name('banners.destroy');
+
+    // Media Library
+    Route::get('/media',          [CmsController::class, 'media'])->name('media');
+    Route::post('/media/upload',  [CmsController::class, 'upload'])->name('media.upload');
+    Route::delete('/media/{media}', [CmsController::class, 'destroyMedia'])->name('media.destroy');
+});
+
+// ──────────────────────────────────────────────────────────────────────────
+// Automations
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('automations')->name('automations.')->group(function () {
+
+    // Journeys
+    Route::get('/',              [AutomationsController::class, 'index'])->name('index');
+    Route::get('/create',        [AutomationsController::class, 'create'])->name('create');
+    Route::post('/',             [AutomationsController::class, 'store'])->name('store');
+    Route::get('/{journey}/edit', [AutomationsController::class, 'edit'])->name('edit');
+    Route::patch('/{journey}',   [AutomationsController::class, 'update'])->name('update');
+    Route::delete('/{journey}',  [AutomationsController::class, 'destroy'])->name('destroy');
+
+    // Journey actions
+    Route::patch('/{journey}/pause',     [AutomationsController::class, 'pause'])->name('pause');
+    Route::patch('/{journey}/resume',    [AutomationsController::class, 'resume'])->name('resume');
+    Route::post('/{journey}/duplicate',  [AutomationsController::class, 'duplicate'])->name('duplicate');
+    Route::patch('/{journey}/publish',   [AutomationsController::class, 'publish'])->name('publish');
+
+    // Triggers registry
+    Route::get('/triggers',            [AutomationsController::class, 'triggers'])->name('triggers');
+    Route::get('/triggers/{trigger}',  [AutomationsController::class, 'triggerSchema'])->name('triggers.schema');
+    Route::post('/triggers/{trigger}/test', [AutomationsController::class, 'testFire'])->name('triggers.test');
+
+    // Templates
+    Route::get('/templates',             [AutomationsController::class, 'templates'])->name('templates');
+    Route::post('/templates',            [AutomationsController::class, 'storeTemplate'])->name('templates.store');
+    Route::patch('/templates/{template}', [AutomationsController::class, 'updateTemplate'])->name('templates.update');
+    Route::delete('/templates/{template}', [AutomationsController::class, 'destroyTemplate'])->name('templates.destroy');
+
+    // Runs & monitoring
+    Route::get('/runs',         [AutomationsController::class, 'runs'])->name('runs');
+    Route::get('/runs/{run}',   [AutomationsController::class, 'runLog'])->name('runs.log');
+    Route::post('/runs/{run}/retry', [AutomationsController::class, 'retry'])->name('runs.retry');
+
+    // Suppressions
+    Route::get('/suppressions',          [AutomationsController::class, 'suppressions'])->name('suppressions');
+    Route::post('/suppressions',         [AutomationsController::class, 'storeSuppression'])->name('suppressions.store');
+    Route::delete('/suppressions/{sup}', [AutomationsController::class, 'destroySuppression'])->name('suppressions.destroy');
+});
+
+// ──────────────────────────────────────────────────────────────────────────
+// Reports & Analytics
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('reports')->name('reports.')->group(function () {
+
+    Route::get('/',         [ReportsController::class, 'index'])->name('index');
+    Route::get('/custom',   [ReportsController::class, 'custom'])->name('custom');
+    Route::post('/custom/run', [ReportsController::class, 'run'])->name('run');
+    Route::post('/custom/save', [ReportsController::class, 'save'])->name('save');
+
+    // Individual report pages (slug-based)
+    Route::get('/{report}', [ReportsController::class, 'show'])->name('show');
+
+    // Schedule a report email
+    Route::post('/schedule', [ReportsController::class, 'scheduleEmail'])->name('schedule');
+
+    // Export
+    Route::get('/{report}/export', [ReportsController::class, 'export'])->name('export');
+});
+
+// ──────────────────────────────────────────────────────────────────────────
+// Settings & Governance
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('settings')->name('settings.')->group(function () {
+
+    Route::get('/', [SettingsController::class, 'index'])->name('index');
+
+    // Audit log
+    Route::get('/audit', [SettingsController::class, 'audit'])->name('audit');
+
+    // S1 — Users & Roles (RBAC)
+    Route::get('/rbac',          [SettingsController::class, 'rbac'])->name('rbac');
+    Route::post('/rbac/invite',  [SettingsController::class, 'inviteUser'])->name('rbac.invite');
+    Route::patch('/rbac/{user}', [SettingsController::class, 'updateUser'])->name('rbac.update');
+    Route::patch('/rbac/{user}/disable', [SettingsController::class, 'disableUser'])->name('rbac.disable');
+    Route::patch('/rbac/{user}/enable',  [SettingsController::class, 'enableUser'])->name('rbac.enable');
+    Route::post('/rbac/{user}/reset-password', [SettingsController::class, 'resetPassword'])->name('rbac.reset');
+    Route::post('/rbac/roles',   [SettingsController::class, 'storeRole'])->name('rbac.roles.store');
+    Route::patch('/rbac/roles/{role}', [SettingsController::class, 'updateRole'])->name('rbac.roles.update');
+    Route::delete('/rbac/roles/{role}', [SettingsController::class, 'destroyRole'])->name('rbac.roles.destroy');
+
+    // S2 — Providers & Channels
+    Route::get('/providers',              [SettingsController::class, 'providers'])->name('providers');
+    Route::patch('/providers/{provider}', [SettingsController::class, 'updateProvider'])->name('providers.update');
+    Route::post('/providers/{provider}/test', [SettingsController::class, 'testProvider'])->name('providers.test');
+
+    // S3 — Identity & Compliance
+    Route::get('/identity',    [SettingsController::class, 'identity'])->name('identity');
+    Route::patch('/identity',  [SettingsController::class, 'updateIdentity'])->name('identity.update');
+
+    // S4 — Auctions Reference
+    Route::get('/auctions',           [SettingsController::class, 'auctions'])->name('auctions');
+    Route::patch('/auctions/sniper',  [SettingsController::class, 'updateSniper'])->name('auctions.sniper');
+    Route::post('/auctions/bands',    [SettingsController::class, 'updateBands'])->name('auctions.bands');
+
+    // S5 — Payments
+    Route::get('/payments',   [SettingsController::class, 'payments'])->name('payments');
+    Route::patch('/payments', [SettingsController::class, 'updatePayments'])->name('payments.update');
+
+    // S6 — Automations Policy
+    Route::get('/automations',   [SettingsController::class, 'automationsPolicy'])->name('automations');
+    Route::patch('/automations', [SettingsController::class, 'updateAutomationsPolicy'])->name('automations.update');
+
+    // S7 — Consent & Privacy
+    Route::get('/privacy',   [SettingsController::class, 'privacy'])->name('privacy');
+    Route::patch('/privacy', [SettingsController::class, 'updatePrivacy'])->name('privacy.update');
+    Route::post('/privacy/rtbf-test', [SettingsController::class, 'rtbfTest'])->name('privacy.rtbf-test');
+
+    // S8 — Branding
+    Route::get('/branding',   [SettingsController::class, 'branding'])->name('branding');
+    Route::patch('/branding', [SettingsController::class, 'updateBranding'])->name('branding.update');
+
+    // S9 — Environment
+    Route::get('/environment',                [SettingsController::class, 'environment'])->name('environment');
+    Route::patch('/environment/keys',         [SettingsController::class, 'updateEnvKeys'])->name('environment.keys');
+    Route::patch('/environment/flags',        [SettingsController::class, 'updateFlags'])->name('environment.flags');
+    Route::post('/environment/seed',          [SettingsController::class, 'seedData'])->name('environment.seed');
+    Route::post('/environment/reset',         [SettingsController::class, 'resetData'])->name('environment.reset');
+    Route::post('/environment/flush-jobs',    [SettingsController::class, 'flushJobs'])->name('environment.flush');
+    Route::post('/environment/purge',         [SettingsController::class, 'purgeAll'])->name('environment.purge');
+});
+
+// ──────────────────────────────────────────────────────────────────────────
+// Notifications
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('notifications')->name('notifications.')->group(function () {
+
+    Route::get('/',                    [NotificationsController::class, 'index'])->name('index');
+    Route::patch('/{id}/read',         [NotificationsController::class, 'markRead'])->name('read');
+    Route::post('/mark-all-read',      [NotificationsController::class, 'markAllRead'])->name('mark-all-read');
+    Route::patch('/{id}/mute',         [NotificationsController::class, 'mute'])->name('mute');
+    Route::delete('/{id}',             [NotificationsController::class, 'destroy'])->name('destroy');
+
+    // Preferences
+    Route::get('/preferences',         [NotificationsController::class, 'preferences'])->name('preferences');
+    Route::patch('/preferences',       [NotificationsController::class, 'updatePreferences'])->name('preferences.update');
+});
+
+// ──────────────────────────────────────────────────────────────────────────
+// Global Tasks
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('tasks')->name('tasks.')->group(function () {
+
+    Route::get('/',             [TasksController::class, 'index'])->name('index');
+    Route::post('/',            [TasksController::class, 'store'])->name('store');
+    Route::get('/{task}',       [TasksController::class, 'show'])->name('show');
+    Route::patch('/{task}',     [TasksController::class, 'update'])->name('update');
+    Route::delete('/{task}',    [TasksController::class, 'destroy'])->name('destroy');
+
+    // Actions
+    Route::patch('/{task}/complete', [TasksController::class, 'complete'])->name('complete');
+    Route::patch('/{task}/snooze',   [TasksController::class, 'snooze'])->name('snooze');
+    Route::patch('/{task}/assign',   [TasksController::class, 'assign'])->name('assign');
+
+    // Bulk
+    Route::post('/bulk/complete', [TasksController::class, 'bulkComplete'])->name('bulk.complete');
+    Route::post('/bulk/assign',   [TasksController::class, 'bulkAssign'])->name('bulk.assign');
+    Route::post('/bulk/delete',   [TasksController::class, 'bulkDelete'])->name('bulk.delete');
+});
 
 // ── A6. Static auth error pages (no auth required) ──────────────────────
 Route::get('/account-locked',   fn() => view('auth.locked'))->name('account.locked');

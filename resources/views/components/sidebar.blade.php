@@ -48,9 +48,13 @@
             'icon' => 'ki-book-open',
             'route' => 'editions.index',
             'children' => [
-                ['label' => 'All Editions', 'route' => 'editions.index'],
-                ['label' => 'Create Edition', 'route' => 'editions.create'],
-                ['label' => 'Schedules', 'route' => 'editions.schedules'],
+                ['label' => 'Dashboard', 'route' => 'editions.index'],
+                ['label' => 'Submissions', 'route' => 'editions.submissions'],
+                ['label' => 'Curation Queue', 'route' => 'editions.curation'],
+                ['label' => 'Editions Listings', 'route' => 'editions.listings'],
+                ['label' => 'Photography & Assets', 'route' => 'editions.photography'],
+                ['label' => 'Features Schedule', 'route' => 'editions.features'],
+                ['label' => 'Provenance', 'route' => 'editions.provenance'],
             ],
         ],
         [
@@ -95,28 +99,28 @@
             'icon' => 'ki-shield-cross',
             'route' => 'disputes.index',
             'children' => [
-                [
-                    'label' => 'Queue',
-                    'route' => 'disputes.index',
-                ],
+                ['label' => 'Queue', 'route' => 'disputes.index'],
             ],
         ],
-
         [
             'label' => 'Deals',
             'icon' => 'ki-shield-cross',
             'route' => 'deals.index',
             'children' => [['label' => 'Overview', 'route' => 'deals.index']],
         ],
+
+        // ── Phase 5 ───────────────────────────────────────────────────────────
+
         [
             'label' => 'Content Management',
             'icon' => 'ki-abstract-26',
             'route' => 'cms.index',
             'children' => [
-                ['label' => 'Pages', 'route' => 'cms.pages'],
-                ['label' => 'Blogs', 'route' => 'cms.blogs'],
-                ['label' => 'Media Library', 'route' => 'cms.media'],
-                ['label' => 'SEO', 'route' => 'cms.seo'],
+                ['label' => 'Library',            'route' => 'cms.index'],
+                ['label' => 'New Page',           'route' => 'cms.pages.create'],
+                ['label' => 'New Post',           'route' => 'cms.posts.create'],
+                ['label' => 'Banners & Features', 'route' => 'cms.banners'],
+                ['label' => 'Media Library',      'route' => 'cms.media'],
             ],
         ],
         [
@@ -124,10 +128,11 @@
             'icon' => 'ki-abstract-13',
             'route' => 'automations.index',
             'children' => [
-                ['label' => 'Workflows', 'route' => 'automations.workflows'],
-                ['label' => 'Email Automation', 'route' => 'automations.email'],
-                ['label' => 'Triggers', 'route' => 'automations.triggers'],
-                ['label' => 'Scheduled Tasks', 'route' => 'automations.scheduled'],
+                ['label' => 'Journeys',     'route' => 'automations.index'],
+                ['label' => 'Triggers',     'route' => 'automations.triggers'],
+                ['label' => 'Templates',    'route' => 'automations.templates'],
+                ['label' => 'Runs',         'route' => 'automations.runs'],
+                ['label' => 'Suppressions', 'route' => 'automations.suppressions'],
             ],
         ],
         [
@@ -135,10 +140,12 @@
             'icon' => 'ki-chart-line',
             'route' => 'reports.index',
             'children' => [
-                ['label' => 'Sales Reports', 'route' => 'reports.sales'],
-                ['label' => 'User Reports', 'route' => 'reports.users'],
-                ['label' => 'Auction Reports', 'route' => 'reports.auctions'],
-                ['label' => 'Exports', 'route' => 'reports.exports'],
+                ['label' => 'Overview',           'route' => 'reports.index'],
+                ['label' => 'Valuation Coverage', 'url' => '/reports/valuation-coverage'],
+                ['label' => 'Valuation Delta',    'url' => '/reports/valuation-delta'],
+                ['label' => 'Listings Funnel',    'url' => '/reports/listings-funnel'],
+                ['label' => 'Auction Perf.',      'url' => '/reports/auction-performance'],
+                ['label' => 'Custom Builder',     'route' => 'reports.custom'],
             ],
         ],
         [
@@ -146,10 +153,16 @@
             'icon' => 'ki-setting-2',
             'route' => 'settings.index',
             'children' => [
-                ['label' => 'General', 'route' => 'settings.general'],
-                ['label' => 'Users and Roles', 'route' => 'settings.users'],
-                ['label' => 'Integrations', 'route' => 'settings.integrations'],
-                ['label' => 'Security', 'route' => 'settings.security'],
+                ['label' => 'Overview',           'route' => 'settings.index'],
+                ['label' => 'Users & Roles',      'route' => 'settings.rbac'],
+                ['label' => 'Providers',          'route' => 'settings.providers'],
+                ['label' => 'Identity & KYC',     'route' => 'settings.identity'],
+                ['label' => 'Auctions Ref.',      'route' => 'settings.auctions'],
+                ['label' => 'Payments',           'route' => 'settings.payments'],
+                ['label' => 'Automations Policy', 'route' => 'settings.automations'],
+                ['label' => 'Consent & Privacy',  'route' => 'settings.privacy'],
+                ['label' => 'Branding',           'route' => 'settings.branding'],
+                ['label' => 'Environment',        'route' => 'settings.environment'],
             ],
         ],
         [
@@ -157,9 +170,8 @@
             'icon' => 'ki-notification-status',
             'route' => 'notifications.index',
             'children' => [
-                ['label' => 'Inbox', 'route' => 'notifications.inbox'],
-                ['label' => 'Templates', 'route' => 'notifications.templates'],
-                ['label' => 'Preferences', 'route' => 'notifications.preferences'],
+                ['label' => 'Centre',       'route' => 'notifications.index'],
+                ['label' => 'Preferences',  'route' => 'notifications.preferences'],
             ],
         ],
         [
@@ -167,9 +179,9 @@
             'icon' => 'ki-calendar-tick',
             'route' => 'tasks.index',
             'children' => [
-                ['label' => 'My Tasks', 'route' => 'tasks.mine'],
-                ['label' => 'Team Tasks', 'route' => 'tasks.team'],
-                ['label' => 'Completed', 'route' => 'tasks.completed'],
+                ['label' => 'My Tasks',  'route' => 'tasks.index'],
+                ['label' => 'Team',      'route' => 'tasks.index'],
+                ['label' => 'Queues',    'route' => 'tasks.index'],
             ],
         ],
     ];
@@ -217,13 +229,22 @@
 
                 @foreach ($navigation as $menu)
                     @php
-                        $isActive =
-                            request()->routeIs($menu['route']) ||
-                            request()->routeIs(str_replace('.index', '.*', $menu['route']));
-                        $hasActiveChild = collect($menu['children'])->contains(
-                            fn($c) => request()->routeIs($c['route'] . '*'),
-                        );
-                        $open = $isActive || $hasActiveChild;
+                        $childActive = false;
+                        foreach ($menu['children'] as $child) {
+                            if (isset($child['url'])) {
+                                if (request()->is(ltrim($child['url'], '/'))) {
+                                    $childActive = true;
+                                    break;
+                                }
+                            } elseif (
+                                request()->routeIs($child['route']) ||
+                                request()->routeIs(explode('.', $child['route'])[0] . '.*')
+                            ) {
+                                $childActive = true;
+                                break;
+                            }
+                        }
+                        $open = $childActive;
                     @endphp
 
                     @if (count($menu['children']) > 0)
@@ -233,8 +254,8 @@
 
                             <div
                                 class="kt-menu-link flex items-center border border-transparent transition-all duration-200
-        {{ $open ? 'bg-accent/60 rounded-xl' : 'hover:bg-accent/60 hover:rounded-xl' }}
-        gap-[14px] px-[10px] py-[10px] cursor-pointer">
+                                    {{ $open ? 'bg-accent/60 rounded-xl' : 'hover:bg-accent/60 hover:rounded-xl' }}
+                                    gap-[14px] px-[10px] py-[10px] cursor-pointer">
 
                                 <span class="kt-menu-icon text-muted-foreground w-[20px]">
                                     <i class="ki-filled {{ $menu['icon'] }} text-base"></i>
@@ -254,21 +275,22 @@
                                 <div class="flex flex-col gap-1 pt-1 ps-7">
                                     @foreach ($menu['children'] as $child)
                                         @php
-                                            $childActive = request()->routeIs($child['route'] . '*');
+                                            $childActive = isset($child['url'])
+                                                ? request()->is(ltrim($child['url'], '/'))
+                                                : request()->routeIs($child['route'] . '*');
                                         @endphp
 
                                         <div class="kt-menu-item">
-                                            <a href="{{ Route::has($child['route']) ? route($child['route']) : '#' }}"
+                                            <a href="{{ isset($child['url']) ? $child['url'] : (Route::has($child['route'] ?? '') ? route($child['route']) : '#') }}"
                                                 class="kt-menu-link flex items-center rounded-lg transition-all duration-200
-                    {{ $childActive
-                        ? 'bg-primary/10 text-primary font-semibold'
-                        : 'text-muted-foreground hover:bg-accent/40 hover:text-foreground' }}
-                    px-3 py-2 text-[13px]">
+                                                    {{ $childActive
+                                                        ? 'bg-primary/10 text-primary font-semibold'
+                                                        : 'text-muted-foreground hover:bg-accent/40 hover:text-foreground' }}
+                                                    px-3 py-2 text-[13px]">
 
-                                                {{-- Small bullet --}}
                                                 <span
                                                     class="w-[5px] h-[5px] rounded-full me-3
-                        {{ $childActive ? 'bg-primary' : 'bg-muted-foreground/40' }}">
+                                                        {{ $childActive ? 'bg-primary' : 'bg-muted-foreground/40' }}">
                                                 </span>
 
                                                 <span class="kt-menu-title">
@@ -289,8 +311,7 @@
                                 <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
                                     <i class="ki-filled {{ $menu['icon'] }} text-base"></i>
                                 </span>
-                                <span
-                                    class="kt-menu-title text-sm font-medium text-foreground">{{ $menu['label'] }}</span>
+                                <span class="kt-menu-title text-sm font-medium text-foreground">{{ $menu['label'] }}</span>
                             </a>
                         </div>
                     @endif
