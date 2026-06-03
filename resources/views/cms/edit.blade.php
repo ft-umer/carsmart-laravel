@@ -8,6 +8,13 @@
 @include('partials._retention_banner')
 
 <div class="kt-container-fixed">
+<nav class="flex items-center gap-1.5 text-xs text-muted-foreground mb-4">
+        <a href="{{ route('dashboard') }}" class="hover:text-foreground transition-colors">Home</a>
+        <i data-lucide="chevron-right" class="w-3 h-3 shrink-0"></i>
+         <a href="{{ route('cms.index') }}" class="hover:text-foreground transition-colors">CMS</a>
+        <i data-lucide="chevron-right" class="w-3 h-3 shrink-0"></i>
+        <span class="text-foreground font-medium">{{ $item['title'] ?? 'New Content' }}</span>
+    </nav>
 
     {{-- ── Editor Toolbar ── --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">

@@ -281,12 +281,6 @@ Route::prefix('disputes')->name('disputes.')->group(function () {
 });
 Route::get('/disputes/escalations', [DisputesController::class, 'escalations'])->name('disputes.escalations');
 
-Route::get('/content',                fn() => view('stub', ['title' => 'Content Management']))->name('cms.index');
-Route::get('/content/pages',          fn() => view('stub', ['title' => 'Pages']))->name('cms.pages');
-Route::get('/content/blogs',          fn() => view('stub', ['title' => 'Blogs']))->name('cms.blogs');
-Route::get('/content/media',          fn() => view('stub', ['title' => 'Media Library']))->name('cms.media');
-Route::get('/content/seo',            fn() => view('stub', ['title' => 'SEO']))->name('cms.seo');
-
 
 // ──────────────────────────────────────────────────────────────────────────
 // CMS

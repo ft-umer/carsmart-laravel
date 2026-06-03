@@ -98,9 +98,7 @@
             'label' => 'Disputes',
             'icon' => 'ki-shield-cross',
             'route' => 'disputes.index',
-            'children' => [
-                ['label' => 'Queue', 'route' => 'disputes.index'],
-            ],
+            'children' => [['label' => 'Queue', 'route' => 'disputes.index']],
         ],
         [
             'label' => 'Deals',
@@ -116,11 +114,16 @@
             'icon' => 'ki-abstract-26',
             'route' => 'cms.index',
             'children' => [
-                ['label' => 'Library',            'route' => 'cms.index'],
-                ['label' => 'New Page',           'route' => 'cms.pages.create'],
-                ['label' => 'New Post',           'route' => 'cms.posts.create'],
+                // Overview
+                ['label' => 'Content Library', 'route' => 'cms.index'],
+
+                // Creation
+                ['label' => 'Create Page', 'route' => 'cms.pages.create'],
+                ['label' => 'Create Post', 'route' => 'cms.posts.create'],
+
+                // Assets
+                ['label' => 'Media Library', 'route' => 'cms.media'],
                 ['label' => 'Banners & Features', 'route' => 'cms.banners'],
-                ['label' => 'Media Library',      'route' => 'cms.media'],
             ],
         ],
         [
@@ -128,10 +131,10 @@
             'icon' => 'ki-abstract-13',
             'route' => 'automations.index',
             'children' => [
-                ['label' => 'Journeys',     'route' => 'automations.index'],
-                ['label' => 'Triggers',     'route' => 'automations.triggers'],
-                ['label' => 'Templates',    'route' => 'automations.templates'],
-                ['label' => 'Runs',         'route' => 'automations.runs'],
+                ['label' => 'Journeys', 'route' => 'automations.index'],
+                ['label' => 'Triggers', 'route' => 'automations.triggers'],
+                ['label' => 'Templates', 'route' => 'automations.templates'],
+                ['label' => 'Runs', 'route' => 'automations.runs'],
                 ['label' => 'Suppressions', 'route' => 'automations.suppressions'],
             ],
         ],
@@ -140,12 +143,12 @@
             'icon' => 'ki-chart-line',
             'route' => 'reports.index',
             'children' => [
-                ['label' => 'Overview',           'route' => 'reports.index'],
+                ['label' => 'Overview', 'route' => 'reports.index'],
                 ['label' => 'Valuation Coverage', 'url' => '/reports/valuation-coverage'],
-                ['label' => 'Valuation Delta',    'url' => '/reports/valuation-delta'],
-                ['label' => 'Listings Funnel',    'url' => '/reports/listings-funnel'],
-                ['label' => 'Auction Perf.',      'url' => '/reports/auction-performance'],
-                ['label' => 'Custom Builder',     'route' => 'reports.custom'],
+                ['label' => 'Valuation Delta', 'url' => '/reports/valuation-delta'],
+                ['label' => 'Listings Funnel', 'url' => '/reports/listings-funnel'],
+                ['label' => 'Auction Perf.', 'url' => '/reports/auction-performance'],
+                ['label' => 'Custom Builder', 'route' => 'reports.custom'],
             ],
         ],
         [
@@ -153,16 +156,16 @@
             'icon' => 'ki-setting-2',
             'route' => 'settings.index',
             'children' => [
-                ['label' => 'Overview',           'route' => 'settings.index'],
-                ['label' => 'Users & Roles',      'route' => 'settings.rbac'],
-                ['label' => 'Providers',          'route' => 'settings.providers'],
-                ['label' => 'Identity & KYC',     'route' => 'settings.identity'],
-                ['label' => 'Auctions Ref.',      'route' => 'settings.auctions'],
-                ['label' => 'Payments',           'route' => 'settings.payments'],
+                ['label' => 'Overview', 'route' => 'settings.index'],
+                ['label' => 'Users & Roles', 'route' => 'settings.rbac'],
+                ['label' => 'Providers', 'route' => 'settings.providers'],
+                ['label' => 'Identity & KYC', 'route' => 'settings.identity'],
+                ['label' => 'Auctions Ref.', 'route' => 'settings.auctions'],
+                ['label' => 'Payments', 'route' => 'settings.payments'],
                 ['label' => 'Automations Policy', 'route' => 'settings.automations'],
-                ['label' => 'Consent & Privacy',  'route' => 'settings.privacy'],
-                ['label' => 'Branding',           'route' => 'settings.branding'],
-                ['label' => 'Environment',        'route' => 'settings.environment'],
+                ['label' => 'Consent & Privacy', 'route' => 'settings.privacy'],
+                ['label' => 'Branding', 'route' => 'settings.branding'],
+                ['label' => 'Environment', 'route' => 'settings.environment'],
             ],
         ],
         [
@@ -170,8 +173,8 @@
             'icon' => 'ki-notification-status',
             'route' => 'notifications.index',
             'children' => [
-                ['label' => 'Centre',       'route' => 'notifications.index'],
-                ['label' => 'Preferences',  'route' => 'notifications.preferences'],
+                ['label' => 'Centre', 'route' => 'notifications.index'],
+                ['label' => 'Preferences', 'route' => 'notifications.preferences'],
             ],
         ],
         [
@@ -179,9 +182,9 @@
             'icon' => 'ki-calendar-tick',
             'route' => 'tasks.index',
             'children' => [
-                ['label' => 'My Tasks',  'route' => 'tasks.index'],
-                ['label' => 'Team',      'route' => 'tasks.index'],
-                ['label' => 'Queues',    'route' => 'tasks.index'],
+                ['label' => 'My Tasks', 'route' => 'tasks.index'],
+                ['label' => 'Team', 'route' => 'tasks.index'],
+                ['label' => 'Queues', 'route' => 'tasks.index'],
             ],
         ],
     ];
@@ -311,7 +314,8 @@
                                 <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
                                     <i class="ki-filled {{ $menu['icon'] }} text-base"></i>
                                 </span>
-                                <span class="kt-menu-title text-sm font-medium text-foreground">{{ $menu['label'] }}</span>
+                                <span
+                                    class="kt-menu-title text-sm font-medium text-foreground">{{ $menu['label'] }}</span>
                             </a>
                         </div>
                     @endif

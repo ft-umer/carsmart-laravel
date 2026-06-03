@@ -22,14 +22,15 @@ class CmsController extends Controller
         $owner  = $request->input('owner');
 
         $allItems = [
-            ['id' => 1, 'title' => 'How It Works',               'slug' => 'how-it-works',          'type' => 'page', 'status' => 'Published', 'owner' => 'Alice Morgan', 'updated_at' => now()->subDays(2)],
-            ['id' => 2, 'title' => 'About Carsmart',              'slug' => 'about',                 'type' => 'page', 'status' => 'Published', 'owner' => 'Alice Morgan', 'updated_at' => now()->subDays(5)],
-            ['id' => 3, 'title' => 'Terms & Conditions',          'slug' => 'terms',                 'type' => 'page', 'status' => 'Draft',     'owner' => 'Ben Carter',   'updated_at' => now()->subDays(10)],
-            ['id' => 4, 'title' => 'Privacy Policy',              'slug' => 'privacy',               'type' => 'page', 'status' => 'Published', 'owner' => 'Ben Carter',   'updated_at' => now()->subDays(14)],
-            ['id' => 5, 'title' => 'Spring Sale Campaign',        'slug' => 'spring-sale-2025',      'type' => 'post', 'status' => 'Scheduled', 'owner' => 'Clara James',  'updated_at' => now()->subDays(1)],
-            ['id' => 6, 'title' => 'New Auction Feature Launch',  'slug' => 'auction-feature-launch','type' => 'post', 'status' => 'Published', 'owner' => 'Clara James',  'updated_at' => now()->subDays(3)],
-            ['id' => 7, 'title' => 'Vendor Onboarding Guide',     'slug' => 'vendor-onboarding',     'type' => 'post', 'status' => 'Draft',     'owner' => 'David Singh',  'updated_at' => now()->subDays(7)],
-            ['id' => 8, 'title' => 'Seller FAQ',                  'slug' => 'seller-faq',            'type' => 'page', 'status' => 'Archived',  'owner' => 'Emma Walsh',   'updated_at' => now()->subDays(30)],
+            ['id' => 1, 'title' => 'How It Works',               'slug' => 'how-it-works',          'type' => 'page', 'status' => 'Published', 'owner' => 'Alice Morgan', 'scheduled_at' => null, 'updated_at' => now()->subDays(2)],
+            ['id' => 2, 'title' => 'About Carsmart',              'slug' => 'about',                 'type' => 'page', 'status' => 'Published', 'owner' => 'Alice Morgan', 'scheduled_at' => null, 'updated_at' => now()->subDays(5)],
+            ['id' => 3, 'title' => 'Terms & Conditions',          'slug' => 'terms',                 'type' => 'page', 'status' => 'Draft',     'owner' => 'Ben Carter',   'scheduled_at' => null, 'updated_at' => now()->subDays(10)],
+            ['id' => 4, 'title' => 'Privacy Policy',              'slug' => 'privacy',               'type' => 'page', 'status' => 'Published', 'owner' => 'Ben Carter',   'scheduled_at' => null, 'updated_at' => now()->subDays(14)],
+            ['id' => 5, 'title' => 'Spring Sale Campaign',        'slug' => 'spring-sale-2025',      'type' => 'post', 'status' => 'Scheduled', 'owner' => 'Clara James',  'scheduled_at' => now()->addDays(1), 'updated_at' => now()->subDays(1)],
+            ['id' => 6, 'title' => '
+New Auction Feature Launch', 'slug' => 'auction-feature-launch', 'type' => 'post', 'status' => 'Published', 'owner' => 'Clara James',  'scheduled_at' => null, 'updated_at' => now()->subHours(5)],
+            ['id' => 7, 'title' => 'Vendor Onboarding Guide',     'slug' => 'vendor-onboarding',     'type' => 'post', 'status' => 'Draft',     'owner' => 'David Singh',  'scheduled_at' => null, 'updated_at' => now()->subDays(7)],
+            ['id' => 8, 'title' => 'Seller FAQ',                  'slug' => 'seller-faq',            'type' => 'page', 'status' => 'Archived',  'owner' => 'Emma Walsh',   'scheduled_at' => null, 'updated_at' => now()->subDays(30)],
         ];
 
         // Tab filter
@@ -182,9 +183,9 @@ class CmsController extends Controller
     public function banners(Request $request): View
     {
         $featureData = [
-            ['id' => 1, 'slot' => 'homepage_hero',   'date' => now()->toDateString(),                    'end_date' => now()->addDays(7)->toDateString(), 'ref_type' => 'post',    'ref_id' => 6, 'channels' => ['web', 'app'], 'content' => ['title' => 'New Auction Feature Launch']],
-            ['id' => 2, 'slot' => 'homepage_banner',  'date' => now()->addDays(3)->toDateString(),        'end_date' => now()->addDays(10)->toDateString(),'ref_type' => 'post',    'ref_id' => 5, 'channels' => ['web'],        'content' => ['title' => 'Spring Sale Campaign']],
-            ['id' => 3, 'slot' => 'editions_spotlight','date' => now()->subDays(2)->toDateString(),       'end_date' => now()->addDays(5)->toDateString(), 'ref_type' => 'listing', 'ref_id' => 1, 'channels' => ['web', 'email'],'content' => ['title' => 'Featured: Porsche 911']],
+            ['id' => 1, 'title' => 'New Auction Feature Launch', 'slot' => 'homepage_hero',   'date' => now()->toDateString(),                    'end_date' => now()->addDays(7)->toDateString(), 'ref_type' => 'post',    'ref_id' => 6, 'channels' => ['web', 'app'], 'content' => ['title' => 'New Auction Feature Launch']],
+            ['id' => 2, 'title' => 'Spring Sale Campaign',      'slot' => 'homepage_banner',  'date' => now()->addDays(3)->toDateString(),        'end_date' => now()->addDays(10)->toDateString(),'ref_type' => 'post',    'ref_id' => 5, 'channels' => ['web'],        'content' => ['title' => 'Spring Sale Campaign']],
+            ['id' => 3, 'title' => 'Featured: Porsche 911',    'slot' => 'editions_spotlight','date' => now()->subDays(2)->toDateString(),       'end_date' => now()->addDays(5)->toDateString(), 'ref_type' => 'listing', 'ref_id' => 1, 'channels' => ['web', 'email'],'content' => ['title' => 'Featured: Porsche 911']],
         ];
 
         $page     = $request->input('page', 1);
