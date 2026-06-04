@@ -4,19 +4,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/**
+ * ListingController
+ *
+ * Handles L0 (Index), L1 (Create/Store), L2 (Detail),
+ * L7 (Bulk), and L8 (Transitions).
+ *
+ * ListingCreateController and ListingDetailController have been
+ * consolidated into this single controller to remove duplication.
+ * Delete those two files.
+ */
 class ListingController extends Controller
 {
-    /**
-     * L0 — Listings Index (Browse / Search)
-     */
+    // =========================================================================
+    // L0 — Listings Index (Browse / Search)
+    // =========================================================================
+
     public function index(Request $request)
     {
         $listings = $this->sampleListings();
 
-        // Filter by search term (stub — replace with Eloquent scopes)
         if ($search = $request->get('search')) {
             $listings = array_filter($listings, fn($l) =>
-                str_contains(strtolower($l['id'] . $l['vehicle'] . $l['vrm']), strtolower($search))
+                str_contains(
+                    strtolower($l['id'] . $l['vehicle'] . $l['vrm'] . ($l['user_name'] ?? '') . ($l['owner'] ?? '')),
+                    strtolower($search)
+                )
             );
         }
 
@@ -28,6 +41,14 @@ class ListingController extends Controller
             $listings = array_filter($listings, fn($l) => $l['qa'] === $qa);
         }
 
+        if ($kyc = $request->get('kyc')) {
+            $listings = array_filter($listings, fn($l) => ($l['kyc_status'] ?? '') === $kyc);
+        }
+
+        if ($saleType = $request->get('sale_type')) {
+            $listings = array_filter($listings, fn($l) => ($l['sale_type'] ?? '') === $saleType);
+        }
+
         $valuations = $this->sampleValuations();
 
         return view('listings.index', [
@@ -36,61 +57,97 @@ class ListingController extends Controller
         ]);
     }
 
-    /**
-     * L2 — Listing Detail (Record view) — returned as HTML partial for AJAX modal
-     */
+    // =========================================================================
+    // L1 — Create Wizard (GET)
+    // =========================================================================
+
+    public function create()
+    {
+        return view('listings.create');
+    }
+
+    // =========================================================================
+    // L1 — Store new listing (wizard POST)
+    // =========================================================================
+
+    public function store(Request $request)
+    {
+        // TODO: validate + persist via Eloquent
+
+        $submittedForQa = $request->boolean('submit_for_qa');
+
+        // Events: listing_created, media_uploaded, document_uploaded
+        // + listing_submitted_for_qa (if submitting directly)
+        $events = ['listing_created'];
+
+        if ($request->hasFile('media')) {
+            $events[] = 'media_uploaded';
+        }
+
+        if ($request->hasFile('documents')) {
+            $events[] = 'document_uploaded';
+        }
+
+        if ($submittedForQa) {
+            $events[] = 'listing_submitted_for_qa';
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $submittedForQa
+                ? 'Listing submitted for QA.'
+                : 'Listing saved as draft.',
+            'events'  => $events,
+            'state'   => $submittedForQa ? 'QA' : 'Draft',
+        ]);
+    }
+
+    // =========================================================================
+    // L2 — Listing Detail (Record view — HTML partial for AJAX modal injection)
+    // =========================================================================
+
     public function show($id)
     {
         $listing = collect($this->sampleListings())->firstWhere('id', $id)
             ?? $this->sampleListings()[0];
 
-        $valuations = $this->sampleValuations();
-
-        // Return partial HTML for modal injection
-        return view('listings.partials.details', compact('listing', 'valuations'));
+        return view('listings.partials.details', compact('listing'));
     }
 
-    /**
-     * L1 — Store new listing (wizard submit)
-     */
-    public function store(Request $request)
-    {
-        // TODO: validate + persist
-        // Events: listing_created, media_uploaded, document_uploaded, listing_submitted_for_qa
-        return response()->json([
-            'success' => true,
-            'message' => 'Listing created successfully.',
-            'event'   => 'listing_created',
-        ]);
-    }
+    // =========================================================================
+    // L8 — State Transitions
+    // =========================================================================
 
-    /**
-     * L8 — State transitions
-     * Actions: submit_qa | approve_qa | fail_qa | publish | assign_auction | archive
-     */
     public function transition(Request $request, $id)
     {
         $action = $request->input('action');
 
+        /*
+         * Canonical states (L8):
+         * Draft → QA → Ready → Published (BIN/Offer) or Assigned to Auction
+         * → Live → Ended → Deal Pending → Handover → Closed
+         * Side paths: Failed QA | Duplicate | Archived
+         */
         $validTransitions = [
-            'submit_qa'      => ['from' => 'Draft',          'to' => 'QA'],
-            'approve_qa'     => ['from' => 'QA',             'to' => 'Ready'],
-            'fail_qa'        => ['from' => 'QA',             'to' => 'Failed QA'],
-            'publish'        => ['from' => 'Ready',          'to' => 'Published'],
-            'assign_auction' => ['from' => 'Ready',          'to' => 'Assigned to Auction'],
-            'end_auction'    => ['from' => 'Live',           'to' => 'Ended'],
-            'deal_pending'   => ['from' => 'Ended',          'to' => 'Deal Pending'],
-            'handover'       => ['from' => 'Deal Pending',   'to' => 'Handover'],
-            'close'          => ['from' => 'Handover',       'to' => 'Closed'],
-            'archive'        => ['from' => '*',              'to' => 'Archived'],
+            'submit_qa'      => ['from' => 'Draft',        'to' => 'QA'],
+            'approve_qa'     => ['from' => 'QA',           'to' => 'Ready'],
+            'fail_qa'        => ['from' => 'QA',           'to' => 'Failed QA'],
+            'publish'        => ['from' => 'Ready',        'to' => 'Published'],
+            'assign_auction' => ['from' => 'Ready',        'to' => 'Assigned to Auction'],
+            'end_auction'    => ['from' => 'Live',         'to' => 'Ended'],
+            'deal_pending'   => ['from' => 'Ended',        'to' => 'Deal Pending'],
+            'handover'       => ['from' => 'Deal Pending', 'to' => 'Handover'],
+            'close'          => ['from' => 'Handover',     'to' => 'Closed'],
+            'duplicate'      => ['from' => '*',            'to' => 'Draft'],   // creates a new draft copy
+            'archive'        => ['from' => '*',            'to' => 'Archived'],
         ];
 
         if (!isset($validTransitions[$action])) {
             return response()->json(['error' => 'Invalid action.'], 422);
         }
 
-        // TODO: persist state change, enforce KYC/QA gates before publish
-        // Events: listing_state_changed
+        // TODO: load listing from DB, enforce KYC/QA gates before publish,
+        //       persist state change, dispatch listing_state_changed event.
 
         return response()->json([
             'success'   => true,
@@ -99,16 +156,35 @@ class ListingController extends Controller
         ]);
     }
 
-    /**
-     * L7 — Bulk actions
-     */
+    // =========================================================================
+    // L7 — Bulk Actions
+    // =========================================================================
+
     public function bulk(Request $request)
     {
-        $action = $request->input('action'); // assign-owner | mark-qa | enable-bin | publication-queue | create-auction | archive | pull-valuations
+        // Allowed actions: assign-owner | mark-qa | enable-bin-offer |
+        //   publication-queue | create-auction | archive | pull-valuations
+        $action = $request->input('action');
         $ids    = $request->input('ids', []);
 
-        // TODO: queue jobs per action; for pull-valuations dispatch per row
-        // Events: listing_bulk_updated, valuation_fetched (bulk)
+        $allowedActions = [
+            'assign-owner',
+            'mark-qa',
+            'enable-bin-offer',
+            'publication-queue',
+            'create-auction',
+            'archive',
+            'pull-valuations',
+        ];
+
+        if (!in_array($action, $allowedActions, true)) {
+            return response()->json(['error' => 'Invalid bulk action.'], 422);
+        }
+
+        // TODO: For pull-valuations, dispatch a queued job per listing ID.
+        //       For others, batch-update via Eloquent.
+        // Events: listing_bulk_updated (always)
+        //         valuation_fetched (when action === pull-valuations, per row)
 
         return response()->json([
             'success' => true,
@@ -118,9 +194,9 @@ class ListingController extends Controller
         ]);
     }
 
-    // ---------------------------------------------------------------------------
-    // Sample data (replace with Eloquent models)
-    // ---------------------------------------------------------------------------
+    // =========================================================================
+    // Sample data — replace with Eloquent models
+    // =========================================================================
 
     private function sampleListings(): array
     {
@@ -152,8 +228,28 @@ class ListingController extends Controller
                 'valuation_date'   => '2 hours ago',
                 'missing_items'    => 2,
                 'valuations'       => [
-                    ['id' => 'v100', 'date' => '2026-05-31', 'source' => 'Carsmart', 'valuer' => 'System', 'amount' => 14200, 'delta' => '+£200', 'notes' => 'Auto-pulled', 'comps' => 0, 'used' => true],
-                    ['id' => 'v99',  'date' => '2026-05-28', 'source' => 'HPI',      'valuer' => 'HPI Feed', 'amount' => 14800, 'delta' => '+£800', 'notes' => 'Market benchmark', 'comps' => 12, 'used' => false],
+                    [
+                        'id'     => 'v100',
+                        'date'   => '2026-05-31',
+                        'source' => 'Carsmart',
+                        'valuer' => 'System',
+                        'amount' => 14200,
+                        'delta'  => '+£200',
+                        'notes'  => 'Auto-pulled',
+                        'comps'  => 0,
+                        'used'   => true,
+                    ],
+                    [
+                        'id'     => 'v99',
+                        'date'   => '2026-05-28',
+                        'source' => 'HPI',
+                        'valuer' => 'HPI Feed',
+                        'amount' => 14800,
+                        'delta'  => '+£800',
+                        'notes'  => 'Market benchmark',
+                        'comps'  => 12,
+                        'used'   => false,
+                    ],
                 ],
             ],
             [
@@ -183,7 +279,17 @@ class ListingController extends Controller
                 'valuation_date'   => '1 day ago',
                 'missing_items'    => 0,
                 'valuations'       => [
-                    ['id' => 'v200', 'date' => '2026-05-30', 'source' => 'CAP', 'valuer' => 'CAP Expert', 'amount' => 11900, 'delta' => '+£150', 'notes' => 'Recommended', 'comps' => 8, 'used' => true],
+                    [
+                        'id'     => 'v200',
+                        'date'   => '2026-05-30',
+                        'source' => 'CAP',
+                        'valuer' => 'CAP Expert',
+                        'amount' => 11900,
+                        'delta'  => '+£150',
+                        'notes'  => 'Recommended',
+                        'comps'  => 8,
+                        'used'   => true,
+                    ],
                 ],
             ],
         ];
@@ -192,9 +298,39 @@ class ListingController extends Controller
     private function sampleValuations(): array
     {
         return [
-            ['date' => '2026-05-30', 'listing' => 'BMW 330i M Sport', 'source' => 'Carsmart', 'valuer' => 'System',     'amount' => 14000, 'delta' => '+2.5%', 'notes' => 'Strong market demand',    'comps' => 12, 'used' => true],
-            ['date' => '2026-05-28', 'listing' => 'BMW 330i M Sport', 'source' => 'HPI',      'valuer' => 'HPI Feed',   'amount' => 15000, 'delta' => '+9.8%', 'notes' => 'Market benchmark',        'comps' => 15, 'used' => false],
-            ['date' => '2026-05-25', 'listing' => 'BMW 330i M Sport', 'source' => 'CAP',      'valuer' => 'CAP Expert', 'amount' => 14250, 'delta' => '+4.3%', 'notes' => 'Recommended valuation',   'comps' => 10, 'used' => true],
+            [
+                'date'    => '2026-05-30',
+                'listing' => 'BMW 330i M Sport',
+                'source'  => 'Carsmart',
+                'valuer'  => 'System',
+                'amount'  => 14000,
+                'delta'   => '+2.5%',
+                'notes'   => 'Strong market demand',
+                'comps'   => 12,
+                'used'    => true,
+            ],
+            [
+                'date'    => '2026-05-28',
+                'listing' => 'BMW 330i M Sport',
+                'source'  => 'HPI',
+                'valuer'  => 'HPI Feed',
+                'amount'  => 15000,
+                'delta'   => '+9.8%',
+                'notes'   => 'Market benchmark',
+                'comps'   => 15,
+                'used'    => false,
+            ],
+            [
+                'date'    => '2026-05-25',
+                'listing' => 'BMW 330i M Sport',
+                'source'  => 'CAP',
+                'valuer'  => 'CAP Expert',
+                'amount'  => 14250,
+                'delta'   => '+4.3%',
+                'notes'   => 'Recommended valuation',
+                'comps'   => 10,
+                'used'    => true,
+            ],
         ];
     }
 }

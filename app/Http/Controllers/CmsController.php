@@ -22,15 +22,14 @@ class CmsController extends Controller
         $owner  = $request->input('owner');
 
         $allItems = [
-            ['id' => 1, 'title' => 'How It Works',               'slug' => 'how-it-works',          'type' => 'page', 'status' => 'Published', 'owner' => 'Alice Morgan', 'scheduled_at' => null, 'updated_at' => now()->subDays(2)],
-            ['id' => 2, 'title' => 'About Carsmart',              'slug' => 'about',                 'type' => 'page', 'status' => 'Published', 'owner' => 'Alice Morgan', 'scheduled_at' => null, 'updated_at' => now()->subDays(5)],
-            ['id' => 3, 'title' => 'Terms & Conditions',          'slug' => 'terms',                 'type' => 'page', 'status' => 'Draft',     'owner' => 'Ben Carter',   'scheduled_at' => null, 'updated_at' => now()->subDays(10)],
-            ['id' => 4, 'title' => 'Privacy Policy',              'slug' => 'privacy',               'type' => 'page', 'status' => 'Published', 'owner' => 'Ben Carter',   'scheduled_at' => null, 'updated_at' => now()->subDays(14)],
-            ['id' => 5, 'title' => 'Spring Sale Campaign',        'slug' => 'spring-sale-2025',      'type' => 'post', 'status' => 'Scheduled', 'owner' => 'Clara James',  'scheduled_at' => now()->addDays(1), 'updated_at' => now()->subDays(1)],
-            ['id' => 6, 'title' => '
-New Auction Feature Launch', 'slug' => 'auction-feature-launch', 'type' => 'post', 'status' => 'Published', 'owner' => 'Clara James',  'scheduled_at' => null, 'updated_at' => now()->subHours(5)],
-            ['id' => 7, 'title' => 'Vendor Onboarding Guide',     'slug' => 'vendor-onboarding',     'type' => 'post', 'status' => 'Draft',     'owner' => 'David Singh',  'scheduled_at' => null, 'updated_at' => now()->subDays(7)],
-            ['id' => 8, 'title' => 'Seller FAQ',                  'slug' => 'seller-faq',            'type' => 'page', 'status' => 'Archived',  'owner' => 'Emma Walsh',   'scheduled_at' => null, 'updated_at' => now()->subDays(30)],
+            ['id' => 1, 'title' => 'How It Works',               'slug' => 'how-it-works',          'type' => 'page', 'status' => 'Published', 'scheduled_at' => null,                          'owner' => 'Alice Morgan', 'updated_at' => now()->subDays(2)],
+            ['id' => 2, 'title' => 'About Carsmart',              'slug' => 'about',                 'type' => 'page', 'status' => 'Published', 'scheduled_at' => null,                          'owner' => 'Alice Morgan', 'updated_at' => now()->subDays(5)],
+            ['id' => 3, 'title' => 'Terms & Conditions',          'slug' => 'terms',                 'type' => 'page', 'status' => 'Draft',     'scheduled_at' => null,                          'owner' => 'Ben Carter',   'updated_at' => now()->subDays(10)],
+            ['id' => 4, 'title' => 'Privacy Policy',              'slug' => 'privacy',               'type' => 'page', 'status' => 'Published', 'scheduled_at' => null,                          'owner' => 'Ben Carter',   'updated_at' => now()->subDays(14)],
+            ['id' => 5, 'title' => 'Spring Sale Campaign',        'slug' => 'spring-sale-2025',      'type' => 'post', 'status' => 'Scheduled', 'scheduled_at' => now()->addDays(3)->toDateTimeString(), 'owner' => 'Clara James',  'updated_at' => now()->subDays(1)],
+            ['id' => 6, 'title' => 'New Auction Feature Launch',  'slug' => 'auction-feature-launch','type' => 'post', 'status' => 'Published', 'scheduled_at' => null,                          'owner' => 'Clara James',  'updated_at' => now()->subDays(3)],
+            ['id' => 7, 'title' => 'Vendor Onboarding Guide',     'slug' => 'vendor-onboarding',     'type' => 'post', 'status' => 'Draft',     'scheduled_at' => null,                          'owner' => 'David Singh',  'updated_at' => now()->subDays(7)],
+            ['id' => 8, 'title' => 'Seller FAQ',                  'slug' => 'seller-faq',            'type' => 'page', 'status' => 'Archived',  'scheduled_at' => null,                          'owner' => 'Emma Walsh',   'updated_at' => now()->subDays(30)],
         ];
 
         // Tab filter
@@ -112,9 +111,9 @@ New Auction Feature Launch', 'slug' => 'auction-feature-launch', 'type' => 'post
         ]);
 
         $versions = collect([
-            ['id' => 3, 'version' => 3, 'user' => 'Alice Morgan', 'note' => 'Updated CTA copy',          'created_at' => now()->subHours(2)],
-            ['id' => 2, 'version' => 2, 'user' => 'Ben Carter',   'note' => 'Fixed broken image link',   'created_at' => now()->subDays(1)],
-            ['id' => 1, 'version' => 1, 'user' => 'Alice Morgan', 'note' => 'Initial draft',             'created_at' => now()->subDays(3)],
+            ['id' => 3, 'version' => 3, 'author' => 'Alice Morgan', 'note' => 'Updated CTA copy',          'created_at' => now()->subHours(2)],
+            ['id' => 2, 'version' => 2, 'author' => 'Ben Carter',   'note' => 'Fixed broken image link',   'created_at' => now()->subDays(1)],
+            ['id' => 1, 'version' => 1, 'author' => 'Alice Morgan', 'note' => 'Initial draft',             'created_at' => now()->subDays(3)],
         ]);
 
         $item = [
@@ -125,8 +124,8 @@ New Auction Feature Launch', 'slug' => 'auction-feature-launch', 'type' => 'post
             'status'           => 'Published',
             'owner_id'         => 1,
             'body'             => '<p>Carsmart makes buying and selling classic cars simple.</p>',
-            'categories'       => 'Guide',
-            'tags'             => 'buying, selling, auctions',
+            'categories'       => ['Guide'],
+            'tags'             => ['buying', 'selling', 'auctions'],
             'seo_title'        => 'How It Works — Carsmart',
             'seo_description'  => 'Learn how to buy and sell classic cars on Carsmart.',
             'homepage_carousel'=> false,
@@ -175,6 +174,11 @@ New Auction Feature Launch', 'slug' => 'auction-feature-launch', 'type' => 'post
     {
         return back()->with('success', "Rolled back to version {$version}.");
     }
+    
+      public function preview(int $id): View
+    {
+        return $this->edit($id);
+    }
 
     // ──────────────────────────────────────────────────────────────────────────
     // CMS2 — Banners & Features
@@ -183,9 +187,9 @@ New Auction Feature Launch', 'slug' => 'auction-feature-launch', 'type' => 'post
     public function banners(Request $request): View
     {
         $featureData = [
-            ['id' => 1, 'title' => 'New Auction Feature Launch', 'slot' => 'homepage_hero',   'date' => now()->toDateString(),                    'end_date' => now()->addDays(7)->toDateString(), 'ref_type' => 'post',    'ref_id' => 6, 'channels' => ['web', 'app'], 'content' => ['title' => 'New Auction Feature Launch']],
-            ['id' => 2, 'title' => 'Spring Sale Campaign',      'slot' => 'homepage_banner',  'date' => now()->addDays(3)->toDateString(),        'end_date' => now()->addDays(10)->toDateString(),'ref_type' => 'post',    'ref_id' => 5, 'channels' => ['web'],        'content' => ['title' => 'Spring Sale Campaign']],
-            ['id' => 3, 'title' => 'Featured: Porsche 911',    'slot' => 'editions_spotlight','date' => now()->subDays(2)->toDateString(),       'end_date' => now()->addDays(5)->toDateString(), 'ref_type' => 'listing', 'ref_id' => 1, 'channels' => ['web', 'email'],'content' => ['title' => 'Featured: Porsche 911']],
+            ['title' => 'New Auction Feature Launch', 'id' => 1, 'slot' => 'homepage_hero',   'date' => now()->toDateString(),                    'end_date' => now()->addDays(7)->toDateString(), 'ref_type' => 'post',    'ref_id' => 6, 'channels' => ['web', 'app'], 'content' => ['title' => 'New Auction Feature Launch']],
+            ['title' => 'Spring Sale Campaign',      'id' => 2, 'slot' => 'homepage_banner',  'date' => now()->addDays(3)->toDateString(),        'end_date' => now()->addDays(10)->toDateString(),'ref_type' => 'post',    'ref_id' => 5, 'channels' => ['web'],        'content' => ['title' => 'Spring Sale Campaign']],
+            ['title' => 'Featured: Porsche 911',     'id' => 3, 'slot' => 'editions_spotlight','date' => now()->subDays(2)->toDateString(),       'end_date' => now()->addDays(5)->toDateString(), 'ref_type' => 'listing', 'ref_id' => 1, 'channels' => ['web', 'email'],'content' => ['title' => 'Featured: Porsche 911']],
         ];
 
         $page     = $request->input('page', 1);

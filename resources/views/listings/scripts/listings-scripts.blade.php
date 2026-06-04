@@ -1,266 +1,188 @@
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
-            const listingModal = document.getElementById('listing-detail-modal');
-            const quickModal = document.getElementById('quick-view-modal');
+    // =========================================================================
+    // DETAIL MODAL — open via AJAX
+    // =========================================================================
+    document.addEventListener('click', (e) => {
 
-            // OPEN DETAIL
-            document.addEventListener('click', (e) => {
-
-                const detailBtn = e.target.closest('.open-detail');
-                if (detailBtn) {
-
-                    listingModal.classList.remove('hidden');
-                    listingModal.classList.add('flex');
-
-                    return;
-                }
-
-                const quickBtn = e.target.closest('.quick-view');
-                if (quickBtn) {
-
-                    quickModal.classList.remove('hidden');
-                    quickModal.classList.add('flex');
-
-                    return;
-                }
-            });
-
-            // CLOSE ANY MODAL
-            document.addEventListener('click', (e) => {
-
-                if (e.target.closest('.close-modal')) {
-
-                    document.querySelectorAll('#listing-detail-modal, #quick-view-modal')
-                        .forEach(modal => {
-                            modal.classList.add('hidden');
-                            modal.classList.remove('flex');
-                        });
-                }
-            });
-
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const wizardModal = document.getElementById('add-listing-wizard');
-
-            function closeWizard() {
-                wizardModal.classList.add('hidden');
-                wizardModal.classList.remove('flex');
+        const detailBtn = e.target.closest('.open-detail');
+        if (detailBtn) {
+            const id = detailBtn.dataset.id;
+            if (id && window.openListingDetail) {
+                window.openListingDetail(id);
             }
-            let currentStep = 1;
-            const totalSteps = 5;
+            return;
+        }
 
-            const showStep = (step) => {
+        // Quick view modal
+        const quickBtn = e.target.closest('.quick-view');
+        if (quickBtn) {
+            const modal = document.getElementById('quick-view-modal');
+            modal?.classList.remove('hidden');
+            modal?.classList.add('flex');
+        }
+    });
 
-                for (let i = 1; i <= totalSteps; i++) {
-                    document.getElementById(`wizard-step-${i}`)
-                        ?.classList.add('hidden');
-                }
-
-                document.getElementById(`wizard-step-${step}`)
-                    ?.classList.remove('hidden');
-
-                // Back button hide on step 1
-                document.getElementById('wizard-back')?.style &&
-                    (document.getElementById('wizard-back').style.display =
-                        step === 1 ? 'none' : 'inline-flex');
-
-            };
-
-            // INIT
-            showStep(currentStep);
-
-            // NEXT
-            document.getElementById('wizard-next')?.addEventListener('click', () => {
-
-                if (currentStep < totalSteps) {
-                    currentStep++;
-                    showStep(currentStep);
-                }
-
-                if (currentStep === totalSteps) {
-                    document.getElementById('wizard-next').textContent = 'Create Listing';
-                }
+    // Close quick-view
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.close-modal')) {
+            document.querySelectorAll('#quick-view-modal').forEach(modal => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             });
+        }
+    });
 
-            // BACK
-            document.getElementById('wizard-back')?.addEventListener('click', () => {
+    // =========================================================================
+    // TOP-NAV TABS (Listings / QA / Publication / Valuations / Exchange / Lifecycle)
+    // =========================================================================
+    const allViews = ['listings', 'qa', 'publication', 'valuations', 'exchange', 'lifecycle'];
 
-                if (currentStep > 1) {
-                    currentStep--;
-                    showStep(currentStep);
-                }
-            });
-
-
-
-            wizardModal?.addEventListener('click', (e) => {
-
-                // only close if clicking OUTSIDE modal box
-                if (e.target === wizardModal) {
-
-                    closeWizard();
-                    currentStep = 1;
-                    showStep(currentStep);
-                }
-            });
-
-
+    function switchView(target) {
+        allViews.forEach(v => {
+            document.getElementById(`view-${v}`)?.classList.add('hidden');
         });
-    </script>
+        document.getElementById(`view-${target}`)?.classList.remove('hidden');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            const listingModal = document.getElementById('listing-detail-modal');
-            const modalContent = document.getElementById('modal-content');
-            const quickModal = document.getElementById('quick-view-modal');
-
-            // =========================
-            // OPEN DETAIL (FETCH HTML)
-            // =========================
-            document.addEventListener('click', async (e) => {
-
-                const btn = e.target.closest('.open-detail');
-                if (btn) {
-
-                    const id = btn.dataset.id;
-
-                    // optional loading state
-                    modalContent.innerHTML = `
-                <div class="p-6 text-sm text-muted-foreground">
-                    Loading listing...
-                </div>
-            `;
-
-                    listingModal.classList.remove('hidden');
-                    listingModal.classList.add('flex');
-
-                    const res = await fetch(`/listings/${id}`);
-                    const html = await res.text();
-
-                    modalContent.innerHTML = html;
-
-                    return;
-                }
-
-                // QUICK VIEW (optional placeholder)
-                const quickBtn = e.target.closest('.quick-view');
-                if (quickBtn) {
-
-                    quickModal.classList.remove('hidden');
-                    quickModal.classList.add('flex');
-
-                    return;
-                }
-
-                // =========================
-                // CLOSE MODALS
-                // =========================
-
-                if (
-                    e.target.closest('.close-modal') ||
-                    e.target.classList.contains('close-overlay')
-                ) {
-                    listingModal.classList.add('hidden');
-                    listingModal.classList.remove('flex');
-
-                    quickModal?.classList.add('hidden');
-                    quickModal?.classList.remove('flex');
-                }
-            });
-
-      document.addEventListener('click', function (e) {
-
-    const button = e.target.closest('[data-view]');
-    if (!button) return;
-
-    const view = button.dataset.view;
-
-    const views = [
-        'listings',
-        'qa',
-        'publication',
-        'valuations',
-        'exchange',
-        'lifecycle'
-    ];
-
-    views.forEach(v => {
-        document.getElementById(`view-${v}`)?.classList.add('hidden');
-    });
-
-    document.getElementById(`view-${view}`)?.classList.remove('hidden');
-
-    document.querySelectorAll('[data-view]').forEach(btn => {
-        btn.classList.remove('kt-btn-mono');
-        btn.classList.add('kt-btn-ghost');
-    });
-
-    button.classList.remove('kt-btn-ghost');
-    button.classList.add('kt-btn-mono');
-
-    const isListings = view === 'listings';
-
-    document.getElementById('listings-title')
-        ?.classList.toggle('hidden', !isListings);
-
-    document.getElementById('listings-actions')
-        ?.classList.toggle('hidden', !isListings);
-
-    document.getElementById('listings-filters')
-        ?.classList.toggle('hidden', !isListings);
-});
-
+        // Update tab active states
+        document.querySelectorAll('[data-view-tab]').forEach(tab => {
+            const isActive = tab.dataset.viewTab === target;
+            tab.classList.toggle('text-foreground', isActive);
+            tab.classList.toggle('border-b-2', isActive);
+            tab.classList.toggle('border-primary', isActive);
+            tab.classList.toggle('text-muted-foreground', !isActive);
         });
-      
-    </script>
-    
-    <script>
-document.addEventListener('click', function(e) {
-
-    const tab = e.target.closest('.detail-tab');
-
-    if (!tab) return;
-
-    const container = tab.closest('.flex.flex-col');
-
-    const panes = container.querySelectorAll('[data-tab-pane]');
-    const tabs = container.querySelectorAll('.detail-tab');
-
-    const target = tab.dataset.tab;
-
-    panes.forEach(p => p.classList.add('hidden'));
-
-    tabs.forEach(t => {
-        t.classList.remove(
-            'bg-background',
-            'border',
-            'border-b-0',
-            'border-border'
-        );
-
-        t.classList.add('text-muted-foreground');
-    });
-
-    const activePane = container.querySelector(
-        `[data-tab-pane="${target}"]`
-    );
-
-    if (activePane) {
-        activePane.classList.remove('hidden');
     }
 
-    tab.classList.add(
-        'bg-background',
-        'border',
-        'border-b-0',
-        'border-border'
-    );
+    document.querySelectorAll('[data-view-tab]').forEach(tab => {
+        tab.addEventListener('click', () => switchView(tab.dataset.viewTab));
+    });
 
-    tab.classList.remove('text-muted-foreground');
+    // =========================================================================
+    // FILTERS (row filter toggle)
+    // =========================================================================
+    document.getElementById('toggle-filters')?.addEventListener('click', () => {
+        document.getElementById('listings-filters')?.classList.toggle('hidden');
+    });
+
+    // =========================================================================
+    // BULK ACTIONS — checkbox management + action dispatch
+    // =========================================================================
+    const selectAll = document.getElementById('select-all');
+    const bulkBar   = document.getElementById('bulk-bar');
+
+    function updateBulkBar() {
+        const checked = document.querySelectorAll('.row-check:checked');
+        if (bulkBar) {
+            bulkBar.classList.toggle('hidden', checked.length === 0);
+            const countEl = bulkBar.querySelector('.bulk-count');
+            if (countEl) countEl.textContent = checked.length;
+        }
+    }
+
+    selectAll?.addEventListener('change', () => {
+        document.querySelectorAll('.row-check').forEach(cb => {
+            cb.checked = selectAll.checked;
+        });
+        updateBulkBar();
+    });
+
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('row-check')) updateBulkBar();
+    });
+
+    // Bulk action handler
+    document.querySelectorAll('[data-bulk]').forEach(btn => {
+        btn.addEventListener('click', async function () {
+            const action = this.dataset.bulk;
+            const checked = [...document.querySelectorAll('.row-check:checked')];
+            const ids     = checked.map(cb => cb.dataset.id).filter(Boolean);
+
+            if (ids.length === 0) return;
+
+            if (action === 'pull-valuations') {
+                // Per-row status pills
+                ids.forEach(id => {
+                    const pill = document.querySelector(`.bulk-status-pill[data-id="${id}"]`);
+                    if (pill) {
+                        pill.classList.remove('hidden');
+                        pill.textContent = 'In Queue';
+                        pill.className = 'bulk-status-pill kt-badge kt-badge-outline text-xs';
+                    }
+                });
+
+                // Stagger fetches for visual feedback
+                for (const [idx, id] of ids.entries()) {
+                    const pill = document.querySelector(`.bulk-status-pill[data-id="${id}"]`);
+
+                    await new Promise(r => setTimeout(r, idx * 400));
+
+                    if (pill) {
+                        pill.textContent = 'Fetching';
+                        pill.className = 'bulk-status-pill kt-badge kt-badge-warning text-xs';
+                    }
+
+                    await new Promise(r => setTimeout(r, 1200));
+
+                    // TODO: real POST /listings/bulk { action, ids }
+                    const success = Math.random() > 0.15;
+
+                    if (pill) {
+                        if (success) {
+                            pill.textContent = 'Done +£150';
+                            pill.className = 'bulk-status-pill kt-badge kt-badge-success text-xs';
+                        } else {
+                            pill.textContent = 'Failed';
+                            pill.className = 'bulk-status-pill kt-badge kt-badge-danger text-xs';
+                            pill.title = 'Provider unavailable. Hover to retry.';
+                        }
+                    }
+                }
+
+                return;
+            }
+
+            // All other bulk actions — single POST
+            // TODO: POST /listings/bulk { action, ids }
+            console.log('Bulk action:', action, ids);
+        });
+    });
+
+    // =========================================================================
+    // ADD LISTING button → navigate to create page
+    // =========================================================================
+    document.querySelector('[data-action="create-listing"]')?.addEventListener('click', () => {
+        window.location.href = '{{ route("listings.create") }}';
+    });
+
+    // =========================================================================
+    // ADD VALUATION modal (from index-level Valuations tab)
+    // =========================================================================
+    document.querySelector('[data-action="add-valuation"]')?.addEventListener('click', () => {
+        const modal = document.getElementById('add-valuation-modal');
+        modal?.classList.remove('hidden');
+        modal?.classList.add('flex');
+    });
+
+    // =========================================================================
+    // PULL LATEST VALUATION (from index-level Valuations tab)
+    // =========================================================================
+    document.querySelector('[data-action="pull-latest-valuation"]')?.addEventListener('click', () => {
+        // TODO: trigger a standalone pull (no listing ID in this context — prompt if needed)
+        alert('Pull valuation: select a listing first, or use bulk action from the Listings tab.');
+    });
+
+    // =========================================================================
+    // APPLY TO LISTING (Valuations panel recommendation)
+    // =========================================================================
+    document.querySelector('[data-action="apply-to-listing"]')?.addEventListener('click', () => {
+        const modal = document.getElementById('apply-pricing-modal');
+        modal?.classList.remove('hidden');
+        modal?.classList.add('flex');
+    });
+
 });
 </script>
 @endpush

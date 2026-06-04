@@ -145,35 +145,38 @@ Route::prefix('leads')->name('leads.')->group(function () {
     });
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| Listings — Phase 1
+| Listings — Phase 1 (Updated & Complete)
 |--------------------------------------------------------------------------
 */
 
-// L0 — Index (Browse/Search)
+// L0 — Index (Browse / Search)
 Route::get('/listings', [ListingController::class, 'index'])->name('listings.index');
 
-// L1 — Create wizard
+// L1 — Create wizard (GET renders the wizard view)
+Route::get('/listings/create', [ListingController::class, 'create'])->name('listings.create');
+
+// L1 — Store new listing (wizard submit)
 Route::post('/listings', [ListingController::class, 'store'])->name('listings.store');
 
-
-// L7 — Bulk actions
+// L7 — Bulk actions (must be before /{id} so 'bulk' is not captured as an ID)
 Route::post('/listings/bulk', [ListingController::class, 'bulk'])->name('listings.bulk');
 
-// L2 — Detail (AJAX partial for modal)
+// L2 — Detail (AJAX partial — loaded into the detail modal)
 Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings.show');
 
 // L8 — State transitions
 Route::post('/listings/{id}/transition', [ListingController::class, 'transition'])->name('listings.transition');
 
-
-// L4 — Valuations module
+// L4 — Valuations module (standalone index — all valuations across listings)
 Route::get('/valuations', [ValuationController::class, 'index'])->name('valuations.index');
+
+// L4 — Per-listing valuations
 Route::post('/listings/{listingId}/valuations', [ValuationController::class, 'store'])->name('valuations.store');
 Route::post('/listings/{listingId}/valuations/pull', [ValuationController::class, 'pull'])->name('valuations.pull');
 Route::post('/listings/{listingId}/valuations/apply', [ValuationController::class, 'apply'])->name('valuations.apply');
+Route::delete('/listings/{listingId}/valuations/{valuationId}', [ValuationController::class, 'destroy'])->name('valuations.destroy');
 
 Route::prefix('auctions')->group(function () {
 
