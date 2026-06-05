@@ -23,6 +23,12 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\ValuationController;
+use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\VendorsController;
+use App\Http\Controllers\CommunicationsController;
+use App\Http\Controllers\TemplatesController;
+use App\Http\Controllers\ImportsController;
+use App\Http\Controllers\ConsentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -206,11 +212,73 @@ Route::get('/editions',               fn() => view('stub', ['title' => 'All Edit
 Route::get('/editions/create',        fn() => view('stub', ['title' => 'Create Edition']))->name('editions.create');
 Route::get('/editions/schedules',     fn() => view('stub', ['title' => 'Edition Schedules']))->name('editions.schedules');
 
-Route::get('/vendors',                [WalletsController::class, 'index'])->name('vendors.index');
-Route::get('/customers',              fn() => view('stub', ['title' => 'Customer List']))->name('customers.index');
-Route::get('/customers/segments',     fn() => view('stub', ['title' => 'Customer Segments']))->name('customers.segments');
-Route::get('/customers/support',      fn() => view('stub', ['title' => 'Support Requests']))->name('customers.support');
-Route::get('/customers/history',      fn() => view('stub', ['title' => 'Purchase History']))->name('customers.history');
+// ── Phase 3 CRM — Customers (People) C4 ─────────────────────────────────────
+Route::prefix('customers')->name('customers.')->group(function () {
+    Route::get('/',                          [CustomersController::class, 'index'])->name('index');
+    Route::post('/',                         [CustomersController::class, 'store'])->name('store');
+    Route::get('/{id}',                      [CustomersController::class, 'show'])->name('show');
+    Route::patch('/{id}',                    [CustomersController::class, 'update'])->name('update');
+    Route::patch('/{id}/dnc',                [CustomersController::class, 'markDnc'])->name('dnc');
+    Route::post('/{id}/merge',               [CustomersController::class, 'merge'])->name('merge');
+    Route::get('/{id}/export',               [CustomersController::class, 'export'])->name('export');
+    Route::patch('/{id}/consent',            [CustomersController::class, 'updateConsent'])->name('consent');
+});
+
+// ── Phase 3 CRM — Vendors (Companies) C5 ─────────────────────────────────────
+Route::prefix('vendors')->name('vendors.')->group(function () {
+    Route::get('/',                          [VendorsController::class, 'index'])->name('index');
+    Route::post('/',                         [VendorsController::class, 'store'])->name('store');
+    Route::get('/{id}',                      [VendorsController::class, 'show'])->name('show');
+    Route::patch('/{id}',                    [VendorsController::class, 'update'])->name('update');
+    Route::post('/{id}/invite',              [VendorsController::class, 'invite'])->name('invite');
+    Route::post('/{id}/request-documents',   [VendorsController::class, 'requestDocuments'])->name('request-documents');
+    Route::post('/{id}/kyb/start',           [VendorsController::class, 'startKyb'])->name('kyb.start');
+    Route::post('/{id}/kyb/override',        [VendorsController::class, 'overrideKyb'])->name('kyb.override');
+});
+
+// ── Phase 3 CRM — Communications C6 ──────────────────────────────────────────
+Route::prefix('communications')->name('communications.')->group(function () {
+    Route::get('/',                          [CommunicationsController::class, 'index'])->name('index');
+    Route::get('/{id}',                      [CommunicationsController::class, 'show'])->name('show');
+    Route::post('/',                         [CommunicationsController::class, 'send'])->name('send');
+    Route::post('/schedule',                 [CommunicationsController::class, 'schedule'])->name('schedule');
+    Route::patch('/{id}/resolve',            [CommunicationsController::class, 'resolve'])->name('resolve');
+});
+
+// ── Phase 3 CRM — Templates C8 ───────────────────────────────────────────────
+Route::prefix('crm/templates')->name('crm.templates.')->group(function () {
+    Route::get('/',                          [TemplatesController::class, 'index'])->name('index');
+    Route::post('/',                         [TemplatesController::class, 'store'])->name('store');
+    Route::get('/{id}',                      [TemplatesController::class, 'show'])->name('show');
+    Route::patch('/{id}',                    [TemplatesController::class, 'update'])->name('update');
+    Route::delete('/{id}',                   [TemplatesController::class, 'destroy'])->name('destroy');
+    Route::post('/{id}/submit',              [TemplatesController::class, 'submit'])->name('submit');
+    Route::post('/{id}/approve',             [TemplatesController::class, 'approve'])->name('approve');
+    Route::patch('/{id}/archive',            [TemplatesController::class, 'archive'])->name('archive');
+});
+
+// ── Phase 3 CRM — Imports & Deduplication C9 ─────────────────────────────────
+Route::prefix('crm/imports')->name('crm.imports.')->group(function () {
+    Route::get('/',                          [ImportsController::class, 'index'])->name('index');
+    Route::get('/sample',                    [ImportsController::class, 'sample'])->name('sample');
+    Route::post('/validate',                 [ImportsController::class, 'validate'])->name('validate');
+    Route::post('/run',                      [ImportsController::class, 'run'])->name('run');
+    Route::get('/duplicates',                [ImportsController::class, 'duplicates'])->name('duplicates');
+    Route::post('/merge',                    [ImportsController::class, 'merge'])->name('merge');
+    Route::post('/duplicates/{id}/dismiss',  [ImportsController::class, 'dismissDuplicate'])->name('duplicates.dismiss');
+});
+
+// ── Phase 3 CRM — Consent & Privacy C10 ──────────────────────────────────────
+Route::prefix('crm/consent')->name('crm.consent.')->group(function () {
+    Route::get('/',                                      [ConsentController::class, 'index'])->name('index');
+    Route::get('/dnc',                                   [ConsentController::class, 'dncList'])->name('dnc');
+    Route::get('/audit',                                 [ConsentController::class, 'auditLog'])->name('audit');
+    Route::patch('/{entity_type}/{entity_id}',           [ConsentController::class, 'update'])->name('update');
+    Route::post('/{entity_type}/{entity_id}/dnc',        [ConsentController::class, 'setDnc'])->name('dnc.set');
+    Route::delete('/{entity_type}/{entity_id}/dnc',      [ConsentController::class, 'removeDnc'])->name('dnc.remove');
+    Route::post('/rtbf/{entity_id}',                     [ConsentController::class, 'applyRtbf'])->name('rtbf');
+    Route::post('/rtbf/test',                            [ConsentController::class, 'rtbfTest'])->name('rtbf.test');
+});
 
 
 // ── DEALS ─────────────────────────────────────────────────────────────────────

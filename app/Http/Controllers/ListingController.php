@@ -111,7 +111,7 @@ class ListingController extends Controller
         $listing = collect($this->sampleListings())->firstWhere('id', $id)
             ?? $this->sampleListings()[0];
 
-        return view('listings.partials.details', compact('listing'));
+        return view('listings.show', compact('listing'));
     }
 
     // =========================================================================
