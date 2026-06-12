@@ -1,4 +1,18 @@
-<div class="flex flex-col h-full max-h-[90vh] overflow-hidden">
+@extends('layouts.app')
+
+@section('title', ($listing['id'] ?? 'Listing') . ' — Carsmart CRM')
+
+@section('content')
+
+<div class="kt-container-fixed py-6">
+{{-- Breadcrumb --}}
+<nav class="flex items-center gap-1.5 text-xs text-muted-foreground mb-4">
+    <a href="{{ route('listings.index') }}" class="hover:text-foreground">Listings</a>
+    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+    <span class="text-foreground font-medium">{{ $listing['id'] }}</span>
+</nav>
+
+    <div class="flex flex-col">
 
     {{-- ===== HEADER ===== --}}
     <div class="p-4 border-b border-border flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 shrink-0">
@@ -26,9 +40,7 @@
             @endif
             <span class="kt-badge kt-badge-outline">Owner: {{ $listing['owner'] }}</span>
     </div>
-    <button class="kt-btn kt-btn-sm kt-btn-ghost close-modal self-start lg:self-center">
-        <i class="ki-filled ki-cross"></i>
-    </button>
+   
     </div>
 
 {{-- ===== ACTION BAR ===== --}}
@@ -862,3 +874,7 @@
 
 })();
 </script>
+
+</div>
+
+@endsection

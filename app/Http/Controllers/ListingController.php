@@ -103,7 +103,7 @@ class ListingController extends Controller
     }
 
     // =========================================================================
-    // L2 — Listing Detail (Record view — HTML partial for AJAX modal injection)
+    // L2 — Listing Detail (Full page view)
     // =========================================================================
 
     public function show($id)

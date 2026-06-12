@@ -5,18 +5,8 @@
             const listingModal = document.getElementById('listing-detail-modal');
             const quickModal = document.getElementById('quick-view-modal');
 
-            // OPEN DETAIL
+            // QUICK VIEW MODAL
             document.addEventListener('click', (e) => {
-                
-                  const detailBtn = e.target.closest('.open-detail');
-                if (detailBtn) {
-                    const id = detailBtn.dataset.id;
-                    if (id && window.openListingDetail) {
-                        window.openListingDetail(id);
-                    }
-                    return;
-                }
-
 
                 const quickBtn = e.target.closest('.quick-view');
                 if (quickBtn) {
@@ -115,39 +105,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            const listingModal = document.getElementById('listing-detail-modal');
+          
             const modalContent = document.getElementById('modal-content');
             const quickModal = document.getElementById('quick-view-modal');
 
             // =========================
-            // OPEN DETAIL (FETCH HTML)
+            // QUICK VIEW (optional placeholder)
             // =========================
-            document.addEventListener('click', async (e) => {
+            document.addEventListener('click', (e) => {
 
-                const btn = e.target.closest('.open-detail');
-                if (btn) {
-
-                    const id = btn.dataset.id;
-
-                    // optional loading state
-                    modalContent.innerHTML = `
-                <div class="p-6 text-sm text-muted-foreground">
-                    Loading listing...
-                </div>
-            `;
-
-                    listingModal.classList.remove('hidden');
-                    listingModal.classList.add('flex');
-
-                    const res = await fetch(`/listings/${id}`);
-                    const html = await res.text();
-
-                    modalContent.innerHTML = html;
-
-                    return;
-                }
-
-                // QUICK VIEW (optional placeholder)
                 const quickBtn = e.target.closest('.quick-view');
                 if (quickBtn) {
 

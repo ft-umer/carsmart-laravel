@@ -117,7 +117,7 @@
                                     {{-- Bulk valuation status pill (L7) --}}
                                     <span class="bulk-status-pill hidden kt-badge kt-badge-outline text-xs" data-id="{{ $listing['id'] }}"></span>
 
-                                    <button class="kt-btn kt-btn-xs kt-btn-mono open-detail" data-id="{{ $listing['id'] }}">Open</button>
+                                    <a href="{{ route('listings.show', $listing['id']) }}" class="kt-btn kt-btn-xs kt-btn-mono">Open</a>
                                     <button class="kt-btn kt-btn-xs kt-btn-outline quick-view" data-id="{{ $listing['id'] }}">Quick View</button>
                                     <select class="kt-input text-xs py-1 w-auto"
                                         onchange="handleListingRowAction(this.value, '{{ $listing['id'] }}'); this.value='';">
