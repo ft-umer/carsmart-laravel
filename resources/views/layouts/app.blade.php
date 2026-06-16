@@ -419,7 +419,7 @@
                  Main content
             ══════════════════════════════════════════════════ --}}
             <main class="grow pt-[--kt-header-height] pb-8" id="main_content">
-                {{ $slot ?? '' }}
+               
                 @yield('content')
             </main>
 

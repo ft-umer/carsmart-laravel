@@ -23,6 +23,9 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\ValuationController;
+use App\Http\Controllers\EditionsController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\CommunicationsController;
@@ -176,6 +179,7 @@ Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings
 Route::post('/listings/{id}/transition', [ListingController::class, 'transition'])->name('listings.transition');
 
 // L4 — Valuations module (standalone index — all valuations across listings)
+Route::get('/qa', [QAController::class, 'index'])->name('qa.index');
 Route::get('/valuations', [ValuationController::class, 'index'])->name('valuations.index');
 
 // L4 — Per-listing valuations
@@ -562,3 +566,40 @@ Route::prefix('tasks')->name('tasks.')->group(function () {
 // ── A6. Static auth error pages (no auth required) ──────────────────────
 Route::get('/account-locked',   fn() => view('auth.locked'))->name('account.locked');
 Route::get('/session-expired',  fn() => view('auth.session-expired'))->name('session.expired');
+
+// ──────────────────────────────────────────────────────────────────────────
+// Phase 6 — Editions
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('editions')->name('editions.')->group(function () {
+    Route::get('/',            [EditionsController::class, 'dashboard'])->name('dashboard');
+    Route::get('/submissions', [EditionsController::class, 'submissions'])->name('submissions');
+    Route::get('/curation',    [EditionsController::class, 'curation'])->name('curation');
+    Route::get('/listings',    [EditionsController::class, 'listings'])->name('listings');
+    Route::get('/photography', [EditionsController::class, 'photography'])->name('photography');
+    Route::get('/features',    [EditionsController::class, 'features'])->name('features');
+    Route::get('/provenance',  [EditionsController::class, 'provenance'])->name('provenance');
+    Route::get('/concierge',   [EditionsController::class, 'concierge'])->name('concierge');
+});
+
+// ──────────────────────────────────────────────────────────────────────────
+// Phase 7 — Global Search, Audit Viewer & Help Centre
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('search')->name('search.')->group(function () {
+    Route::get('/',      [SearchController::class, 'index'])->name('index');
+    Route::get('/audit', [SearchController::class, 'auditLog'])->name('audit');
+    Route::get('/help',  [SearchController::class, 'help'])->name('help');
+});
+
+// ──────────────────────────────────────────────────────────────────────────
+// Phase 8 — Compliance & Data Protection
+// ──────────────────────────────────────────────────────────────────────────
+Route::prefix('compliance')->name('compliance.')->group(function () {
+    Route::get('/dsar',         [ComplianceController::class, 'dsar'])->name('dsar');
+    Route::get('/erasure',      [ComplianceController::class, 'erasure'])->name('erasure');
+    Route::get('/consent-logs', [ComplianceController::class, 'consentLogs'])->name('consent-logs');
+    Route::get('/kyc-overrides', [ComplianceController::class, 'kycOverrides'])->name('kyc-overrides');
+    Route::get('/sessions',     [ComplianceController::class, 'sessions'])->name('sessions');
+    Route::get('/integrations', [ComplianceController::class, 'integrations'])->name('integrations');
+    Route::get('/anti-fraud',   [ComplianceController::class, 'antiFraud'])->name('anti-fraud');
+    Route::get('/retention',    [ComplianceController::class, 'retention'])->name('retention');
+});

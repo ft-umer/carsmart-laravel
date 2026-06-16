@@ -16,9 +16,9 @@
             'route' => 'leads.index',
             'children' => [
                 ['label' => 'All Leads', 'route' => 'leads.index'],
-                ['label' => 'New Leads', 'route' => 'leads.new'],
-                ['label' => 'Qualified', 'route' => 'leads.qualified'],
-                ['label' => 'Archived', 'route' => 'leads.archived'],
+                ['label' => 'New Leads', 'url' => '/leads?stage=new'],
+                ['label' => 'Qualified', 'url' => '/leads?stage=qualified'],
+                ['label' => 'Archived', 'url' => '/leads?stage=archived'],
             ],
         ],
         [
@@ -46,15 +46,16 @@
         [
             'label' => 'Editions',
             'icon' => 'ki-book-open',
-            'route' => 'editions.index',
+            'route' => 'editions.dashboard',
             'children' => [
-                ['label' => 'Dashboard', 'route' => 'editions.index'],
+                ['label' => 'Dashboard', 'route' => 'editions.dashboard'],
                 ['label' => 'Submissions', 'route' => 'editions.submissions'],
                 ['label' => 'Curation Queue', 'route' => 'editions.curation'],
                 ['label' => 'Editions Listings', 'route' => 'editions.listings'],
                 ['label' => 'Photography & Assets', 'route' => 'editions.photography'],
                 ['label' => 'Features Schedule', 'route' => 'editions.features'],
                 ['label' => 'Provenance', 'route' => 'editions.provenance'],
+                ['label' => 'Concierge', 'route' => 'editions.concierge'],
             ],
         ],
         [
@@ -69,9 +70,9 @@
             'route' => 'customers.index',
             'children' => [
                 ['label' => 'Customer List', 'route' => 'customers.index'],
-                ['label' => 'Segments', 'route' => 'customers.segments'],
-                ['label' => 'Support Requests', 'route' => 'customers.support'],
-                ['label' => 'Purchase History', 'route' => 'customers.history'],
+                ['label' => 'Segments', 'url' => '/customers?view=segments'],
+                ['label' => 'Support Requests', 'url' => '/customers?view=support'],
+                ['label' => 'Purchase History', 'url' => '/customers?view=history'],
             ],
         ],
         [
@@ -185,6 +186,35 @@
                 ['label' => 'My Tasks', 'route' => 'tasks.index'],
                 ['label' => 'Team', 'route' => 'tasks.index'],
                 ['label' => 'Queues', 'route' => 'tasks.index'],
+            ],
+        ],
+
+        // ── Phase 7 ───────────────────────────────────────────────────────────
+        [
+            'label' => 'Search & Audit',
+            'icon' => 'ki-magnifier',
+            'route' => 'search.index',
+            'children' => [
+                ['label' => 'Global Search', 'route' => 'search.index'],
+                ['label' => 'Audit Log',     'route' => 'search.audit'],
+                ['label' => 'Help Centre',   'route' => 'search.help'],
+            ],
+        ],
+
+        // ── Phase 8 ───────────────────────────────────────────────────────────
+        [
+            'label' => 'Compliance',
+            'icon' => 'ki-shield-tick',
+            'route' => 'compliance.dsar',
+            'children' => [
+                ['label' => 'DSAR',              'route' => 'compliance.dsar'],
+                ['label' => 'Right to Erasure',  'route' => 'compliance.erasure'],
+                ['label' => 'Consent Logs',      'route' => 'compliance.consent-logs'],
+                ['label' => 'KYC/KYB Overrides', 'route' => 'compliance.kyc-overrides'],
+                ['label' => 'Sessions',          'route' => 'compliance.sessions'],
+                ['label' => 'Integrations',      'route' => 'compliance.integrations'],
+                ['label' => 'Anti-Fraud',        'route' => 'compliance.anti-fraud'],
+                ['label' => 'Data Retention',    'route' => 'compliance.retention'],
             ],
         ],
     ];
