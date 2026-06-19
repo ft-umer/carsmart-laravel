@@ -195,21 +195,21 @@
                                     <div class="flex items-center gap-1">
                                         <a href="{{ route('tasks.show', $task['id']) }}"
                                            class="kt-btn kt-btn-ghost kt-btn-xs" title="Open">
-                                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                           Open
                                         </a>
                                         @unless($task['completed'] ?? false)
                                             <button class="kt-btn kt-btn-ghost kt-btn-xs text-success task-complete-btn"
                                                     data-id="{{ $task['id'] }}" title="Mark complete">
-                                                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                                Mark Complete
                                             </button>
                                             <button class="kt-btn kt-btn-ghost kt-btn-xs task-snooze-btn"
                                                     data-id="{{ $task['id'] }}" title="Snooze">
-                                                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                                                Snooze
                                             </button>
                                         @endunless
                                         <button class="kt-btn kt-btn-ghost kt-btn-xs task-assign-btn"
                                                 data-id="{{ $task['id'] }}" title="Assign">
-                                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                                           Assign
                                         </button>
                                     </div>
                                 </td>
@@ -349,134 +349,182 @@
         </div>
     </div>
 </div>
-
 @push('scripts')
 <script>
-// ── Tab switching ──────────────────────────────────────────────────────────────
-document.querySelectorAll('.tasks-tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.tasks-tab-btn').forEach(b => {
-            b.className = b.className.replace('border-primary text-primary', 'border-transparent text-muted-foreground hover:text-foreground');
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ── Tab switching (fixed safe toggle) ────────────────────────────────
+    document.querySelectorAll('.tasks-tab-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+
+            document.querySelectorAll('.tasks-tab-btn').forEach(b => {
+                b.classList.remove('border-primary', 'text-primary');
+                b.classList.add('border-transparent', 'text-muted-foreground');
+            });
+
+            this.classList.remove('border-transparent', 'text-muted-foreground');
+            this.classList.add('border-primary', 'text-primary');
+
+            // future: AJAX / query param
         });
-        this.className = this.className.replace('border-transparent text-muted-foreground hover:text-foreground', 'border-primary text-primary');
-        // In production, reload with ?tab= query param or filter via AJAX
     });
-});
 
-// ── New task modal ─────────────────────────────────────────────────────────────
-function openNewTask() {
-    document.getElementById('modal-new-task').classList.remove('hidden');
-    document.getElementById('modal-new-task').classList.add('flex');
-}
-document.getElementById('btn-new-task')?.addEventListener('click', openNewTask);
-document.getElementById('btn-new-task-empty')?.addEventListener('click', openNewTask);
-document.querySelectorAll('.new-task-close').forEach(b => b.addEventListener('click', () => {
-    document.getElementById('modal-new-task').classList.add('hidden');
-    document.getElementById('modal-new-task').classList.remove('flex');
-}));
+    // ── Modal helpers ────────────────────────────────────────────────────
+    const modalNewTask = document.getElementById('modal-new-task');
+    const modalSnooze  = document.getElementById('modal-snooze');
 
-// ── Quick View ─────────────────────────────────────────────────────────────────
-const qv = document.getElementById('task-qv');
-document.querySelectorAll('.task-row').forEach(row => {
-    row.addEventListener('click', function(e) {
-        if (e.target.closest('a,button,input')) return;
-        const id    = this.dataset.id;
-        const title = this.querySelector('td:nth-child(2) .font-medium')?.innerText || '—';
-        const type  = this.querySelector('.kt-badge')?.innerText || '—';
-        const due   = this.querySelectorAll('td')[3]?.innerText.trim() || '—';
-        const prio  = this.querySelectorAll('td')[4]?.innerText.trim() || '—';
-        const owner = this.querySelectorAll('td')[5]?.innerText.trim() || '—';
-        const src   = this.querySelectorAll('td')[6]?.innerText.trim() || '—';
-
-        qv.innerHTML = `
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-foreground text-sm">Task #${id}</h3>
-                <span class="kt-badge kt-badge-outline kt-badge-xs">${type}</span>
-            </div>
-            <div class="space-y-3 flex-1">
-                <p class="text-sm font-medium text-foreground">${title}</p>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="bg-muted/40 rounded-lg p-2">
-                        <div class="text-muted-foreground mb-0.5">Due</div>
-                        <div class="font-medium text-foreground">${due}</div>
-                    </div>
-                    <div class="bg-muted/40 rounded-lg p-2">
-                        <div class="text-muted-foreground mb-0.5">Priority</div>
-                        <div class="font-medium text-foreground">${prio}</div>
-                    </div>
-                    <div class="bg-muted/40 rounded-lg p-2">
-                        <div class="text-muted-foreground mb-0.5">Owner</div>
-                        <div class="font-medium text-foreground">${owner}</div>
-                    </div>
-                    <div class="bg-muted/40 rounded-lg p-2">
-                        <div class="text-muted-foreground mb-0.5">Source</div>
-                        <div class="font-medium text-foreground">${src}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col gap-2 mt-4">
-                <a href="/tasks/${id}" class="kt-btn kt-btn-mono kt-btn-sm w-full justify-center">Open task</a>
-                <div class="flex gap-2">
-                    <button class="kt-btn kt-btn-outline kt-btn-sm flex-1 justify-center">Complete</button>
-                    <button class="kt-btn kt-btn-outline kt-btn-sm flex-1 justify-center">Assign</button>
-                </div>
-            </div>`;
-    });
-});
-
-// ── Snooze modal ───────────────────────────────────────────────────────────────
-document.querySelectorAll('.task-snooze-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-        e.stopPropagation();
-        document.getElementById('modal-snooze').classList.remove('hidden');
-        document.getElementById('modal-snooze').classList.add('flex');
-    });
-});
-document.querySelectorAll('.snooze-close').forEach(b => b.addEventListener('click', () => {
-    document.getElementById('modal-snooze').classList.add('hidden');
-    document.getElementById('modal-snooze').classList.remove('flex');
-}));
-document.querySelectorAll('[name="snooze_until"]').forEach(r => {
-    r.addEventListener('change', () => {
-        document.getElementById('snooze-custom').classList.toggle('hidden', r.value !== 'custom');
-    });
-});
-
-// ── Complete task ──────────────────────────────────────────────────────────────
-document.querySelectorAll('.task-complete-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const row = btn.closest('tr');
-        row.classList.add('opacity-40');
-        row.querySelector('.font-medium')?.classList.add('line-through');
-        btn.disabled = true;
-    });
-});
-
-// ── Bulk selection ─────────────────────────────────────────────────────────────
-const bulkBar   = document.getElementById('bulk-bar');
-const bulkCount = document.getElementById('bulk-count');
-
-document.getElementById('select-all-tasks')?.addEventListener('change', function() {
-    document.querySelectorAll('.task-checkbox').forEach(cb => { cb.checked = this.checked; });
-    updateBulkBar();
-});
-document.querySelectorAll('.task-checkbox').forEach(cb => {
-    cb.addEventListener('change', updateBulkBar);
-});
-
-function updateBulkBar() {
-    const selected = document.querySelectorAll('.task-checkbox:checked').length;
-    if (selected > 0) {
-        bulkBar.classList.remove('hidden');
-        bulkBar.classList.add('flex');
-        bulkCount.textContent = selected + ' selected';
-    } else {
-        bulkBar.classList.add('hidden');
-        bulkBar.classList.remove('flex');
+    function openModal(modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
-}
+
+    function closeModal(modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // ── New Task Modal ────────────────────────────────────────────────────
+    function openNewTask() {
+        openModal(modalNewTask);
+    }
+
+    document.getElementById('btn-new-task')?.addEventListener('click', openNewTask);
+    document.getElementById('btn-new-task-empty')?.addEventListener('click', openNewTask);
+
+    document.querySelectorAll('.new-task-close').forEach(btn => {
+        btn.addEventListener('click', () => closeModal(modalNewTask));
+    });
+
+    // ── Quick View (safer extraction) ─────────────────────────────────────
+    const qv = document.getElementById('task-qv');
+
+    document.querySelectorAll('.task-row').forEach(row => {
+        row.addEventListener('click', function (e) {
+            if (e.target.closest('a,button,input')) return;
+
+            const cells = this.querySelectorAll('td');
+
+            const id    = this.dataset.id;
+            const title = this.querySelector('.font-medium')?.innerText || '—';
+            const type  = this.querySelector('.kt-badge')?.innerText || '—';
+            const due   = cells[3]?.innerText?.trim() || '—';
+            const prio  = cells[4]?.innerText?.trim() || '—';
+            const owner = cells[5]?.innerText?.trim() || '—';
+            const src   = cells[6]?.innerText?.trim() || '—';
+
+            qv.innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-foreground text-sm">Task #${id}</h3>
+                    <span class="kt-badge kt-badge-outline kt-badge-xs">${type}</span>
+                </div>
+
+                <div class="space-y-3 flex-1">
+                    <p class="text-sm font-medium text-foreground">${title}</p>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-muted/40 rounded-lg p-2">
+                            <div class="text-muted-foreground mb-0.5">Due</div>
+                            <div class="font-medium">${due}</div>
+                        </div>
+
+                        <div class="bg-muted/40 rounded-lg p-2">
+                            <div class="text-muted-foreground mb-0.5">Priority</div>
+                            <div class="font-medium">${prio}</div>
+                        </div>
+
+                        <div class="bg-muted/40 rounded-lg p-2">
+                            <div class="text-muted-foreground mb-0.5">Owner</div>
+                            <div class="font-medium">${owner}</div>
+                        </div>
+
+                        <div class="bg-muted/40 rounded-lg p-2">
+                            <div class="text-muted-foreground mb-0.5">Source</div>
+                            <div class="font-medium">${src}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2 mt-4">
+                    <a href="/tasks/${id}" class="kt-btn kt-btn-mono kt-btn-sm w-full justify-center">Open task</a>
+                    <div class="flex gap-2">
+                        <button class="kt-btn kt-btn-outline kt-btn-sm flex-1">Complete</button>
+                        <button class="kt-btn kt-btn-outline kt-btn-sm flex-1">Assign</button>
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    // ── Snooze Modal ─────────────────────────────────────────────────────
+    document.querySelectorAll('.task-snooze-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            openModal(modalSnooze);
+        });
+    });
+
+    document.querySelectorAll('.snooze-close').forEach(btn => {
+        btn.addEventListener('click', () => closeModal(modalSnooze));
+    });
+
+    document.querySelectorAll('[name="snooze_until"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            const custom = document.getElementById('snooze-custom');
+            if (!custom) return;
+            custom.classList.toggle('hidden', radio.value !== 'custom');
+        });
+    });
+
+    // ── Complete task ────────────────────────────────────────────────────
+    document.querySelectorAll('.task-complete-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+
+            const row = btn.closest('tr');
+            if (!row) return;
+
+            row.classList.add('opacity-40');
+
+            const title = row.querySelector('.font-medium');
+            if (title) title.classList.add('line-through');
+
+            btn.disabled = true;
+        });
+    });
+
+    // ── Bulk selection (safe guards added) ───────────────────────────────
+    const bulkBar   = document.getElementById('bulk-bar');
+    const bulkCount = document.getElementById('bulk-count');
+
+    const selectAll = document.getElementById('select-all-tasks');
+
+    function updateBulkBar() {
+        const selected = document.querySelectorAll('.task-checkbox:checked').length;
+
+        if (!bulkBar || !bulkCount) return;
+
+        if (selected > 0) {
+            bulkBar.classList.remove('hidden');
+            bulkBar.classList.add('flex');
+            bulkCount.textContent = `${selected} selected`;
+        } else {
+            bulkBar.classList.add('hidden');
+            bulkBar.classList.remove('flex');
+        }
+    }
+
+    selectAll?.addEventListener('change', function () {
+        document.querySelectorAll('.task-checkbox').forEach(cb => {
+            cb.checked = this.checked;
+        });
+        updateBulkBar();
+    });
+
+    document.querySelectorAll('.task-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateBulkBar);
+    });
+
+});
 </script>
 @endpush
-
 @endsection

@@ -4,12 +4,11 @@
     Steps: 1 Basics → 2 Schedule → 3 Rules → 4 Participants → 5 Lots defaults → 6 Assets → 7 Summary
 --}}
 
-<div id="create-auction-modal"
-     class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+<div id="create-auction-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
     <div class="fixed inset-0 bg-black/50 backdrop-blur-md" data-modal-backdrop></div>
 
     <div role="dialog"
-         class="relative w-full max-w-3xl mx-auto card rounded-xl overflow-hidden border border-border
+        class="relative w-full max-w-3xl mx-auto card rounded-xl overflow-hidden border border-border
                 shadow-2xl bg-background flex flex-col max-h-[92vh] opacity-0 scale-95 transition-all">
 
         {{-- Header --}}
@@ -25,19 +24,19 @@
         <div class="px-5 py-3 border-b border-border bg-muted/20 shrink-0">
             <div class="flex items-center justify-between gap-2 flex-wrap">
                 <div id="wizard-step-pills" class="flex gap-1 flex-wrap">
-                    @foreach(['Basics','Schedule','Rules','Participants','Lot defaults','Assets','Summary'] as $i => $label)
-                    <button data-pill="{{ $i + 1 }}"
+                    @foreach (['Basics', 'Schedule', 'Rules', 'Participants', 'Lot defaults', 'Assets', 'Summary'] as $i => $label)
+                        <button data-pill="{{ $i + 1 }}"
                             class="wizard-pill text-xs px-2.5 py-1 rounded border
                                    {{ $i === 0 ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-border text-muted-foreground' }}">
-                        {{ $i + 1 }}. {{ $label }}
-                    </button>
+                            {{ $i + 1 }}. {{ $label }}
+                        </button>
                     @endforeach
                 </div>
                 <div class="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
                     <span id="wizard-step-label">Step 1 of 7</span>
                     <div class="w-24 h-1.5 rounded-full bg-border overflow-hidden">
                         <div id="wizard-progress-bar" class="h-full bg-primary rounded-full transition-all"
-                             style="width:14%"></div>
+                            style="width:14%"></div>
                     </div>
                 </div>
             </div>
@@ -51,13 +50,14 @@
                 <div class="wizard-step p-5 space-y-4" data-step="1">
                     <h4 class="text-sm font-semibold">Basics</h4>
                     <div>
-                        <label class="block text-xs font-medium mb-1">Auction name <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-medium mb-1">Auction name <span
+                                class="text-red-500">*</span></label>
                         <input name="name" class="kt-input" placeholder="e.g. October Prime Sale" required />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">Description</label>
                         <textarea name="description" rows="3" class="kt-input w-full"
-                                  placeholder="Short description visible to participants"></textarea>
+                            placeholder="Short description visible to participants"></textarea>
                     </div>
                     <div class="flex items-center gap-6">
                         <div>
@@ -75,7 +75,8 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium mb-1">Cohort tag <span class="text-muted-foreground">(optional)</span></label>
+                        <label class="block text-xs font-medium mb-1">Cohort tag <span
+                                class="text-muted-foreground">(optional)</span></label>
                         <input name="cohort_tag" class="kt-input" placeholder="e.g. Prestige, Trade-only" />
                     </div>
                 </div>
@@ -85,11 +86,13 @@
                     <h4 class="text-sm font-semibold">Schedule</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium mb-1">Start date & time <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-medium mb-1">Start date & time <span
+                                    class="text-red-500">*</span></label>
                             <input type="datetime-local" name="start" class="kt-input" required />
                         </div>
                         <div>
-                            <label class="block text-xs font-medium mb-1">End date & time <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-medium mb-1">End date & time <span
+                                    class="text-red-500">*</span></label>
                             <input type="datetime-local" name="end" class="kt-input" required />
                         </div>
                     </div>
@@ -108,11 +111,11 @@
                         <div id="staggered-interval-wrap" class="hidden mt-3">
                             <label class="block text-xs font-medium mb-1">Interval between lots (seconds)</label>
                             <input type="number" name="stagger_interval" value="60" min="10"
-                                   class="kt-input w-36" />
+                                class="kt-input w-36" />
                         </div>
                     </div>
                     <div id="schedule-clash-warning"
-                         class="hidden rounded border border-yellow-200 bg-yellow-50 p-2 text-xs text-yellow-800">
+                        class="hidden rounded border border-yellow-200 bg-yellow-50 p-2 text-xs text-yellow-800">
                         ⚠ Another auction overlaps this time window. Please check the Calendar.
                     </div>
                 </div>
@@ -130,12 +133,13 @@
                             </label>
                             <label class="flex items-center justify-between text-sm cursor-pointer">
                                 Sniper protection
-                                <input type="checkbox" name="sniper_protection" id="sniper-toggle" class="form-checkbox" checked />
+                                <input type="checkbox" name="sniper_protection" id="sniper-toggle"
+                                    class="form-checkbox" checked />
                             </label>
                             <div id="sniper-minutes-wrap" class="pl-4">
                                 <label class="block text-xs font-medium mb-1">Extend by (minutes)</label>
-                                <input type="number" name="sniper_minutes" value="2" min="1" max="30"
-                                       class="kt-input w-24" />
+                                <input type="number" name="sniper_minutes" value="2" min="1"
+                                    max="30" class="kt-input w-24" />
                                 <p class="text-xs text-muted-foreground mt-1">
                                     Each bid in the last N minutes extends closing by N minutes.
                                 </p>
@@ -143,7 +147,8 @@
                         </div>
 
                         <div class="border border-border rounded-lg p-3 space-y-3">
-                            <div class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Reserve & Pricing</div>
+                            <div class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Reserve &
+                                Pricing</div>
                             <label class="flex items-center justify-between text-sm cursor-pointer">
                                 Auto-accept at ≥ Reserve
                                 <input type="checkbox" name="auto_accept" class="form-checkbox" checked />
@@ -164,7 +169,8 @@
                     </div>
 
                     <div class="border border-border rounded-lg p-3 space-y-2">
-                        <div class="text-xs font-medium text-muted-foreground uppercase tracking-wide">BIN / Offer Precedence</div>
+                        <div class="text-xs font-medium text-muted-foreground uppercase tracking-wide">BIN / Offer
+                            Precedence</div>
                         <label class="flex items-center justify-between text-sm cursor-pointer">
                             BIN ends lot until first valid bid
                             <input type="checkbox" name="bin_precedence" class="form-checkbox" checked />
@@ -175,14 +181,15 @@
                     </div>
 
                     <div class="border border-border rounded-lg p-3 space-y-2">
-                        <div class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Bid Increment Schema</div>
+                        <div class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Bid Increment
+                            Schema</div>
                         <select name="increment_schema" class="kt-input">
                             <option value="standard">Standard (£250 → £500 → £1,000 bands)</option>
                             <option value="premium">Premium (£500 → £1,000 → £2,500 bands)</option>
                             <option value="custom">Custom (configure below)</option>
                         </select>
                         <div id="increment-schema-view"
-                             class="text-xs text-muted-foreground mt-1 bg-muted/30 rounded p-2">
+                            class="text-xs text-muted-foreground mt-1 bg-muted/30 rounded p-2">
                             Band 0–£10k: £250 · £10k–£25k: £500 · £25k+: £1,000
                         </div>
                     </div>
@@ -210,13 +217,29 @@
                         <label class="block text-xs font-medium mb-2">Participant mode</label>
                         <div class="space-y-2">
                             <label class="flex items-center gap-2 text-sm cursor-pointer">
-                                <input type="radio" name="participant_mode" value="all" class="form-radio" checked />
+                                <input type="radio" name="participant_mode" value="all" class="form-radio"
+                                    checked />
                                 All eligible vendors
                             </label>
                             <label class="flex items-center gap-2 text-sm cursor-pointer">
                                 <input type="radio" name="participant_mode" value="invite" class="form-radio" />
                                 Invite specific vendors
                             </label>
+                            <div id="vendor-select-wrap" class="hidden mt-3">
+                                <label class="block text-xs font-medium mb-1">Select Vendors</label>
+
+                                <!-- search box -->
+                                <input id="vendor-search" type="text" class="kt-input w-full"
+                                    placeholder="Search vendors..." />
+
+                                <!-- results list -->
+                                <div id="vendor-results"
+                                    class="mt-2 max-h-48 overflow-y-auto border border-border rounded">
+                                </div>
+
+                                <!-- selected chips -->
+                                <div id="vendor-selected" class="flex flex-wrap gap-1 mt-2"></div>
+                            </div>
                             <label class="flex items-center gap-2 text-sm cursor-pointer">
                                 <input type="radio" name="participant_mode" value="set" class="form-radio" />
                                 Use saved participant set
@@ -275,7 +298,8 @@
 
                 {{-- ── Step 6: Assets ────────────────────────────────── --}}
                 <div class="wizard-step hidden p-5 space-y-4" data-step="6">
-                    <h4 class="text-sm font-semibold">Assets <span class="text-muted-foreground text-xs font-normal">(public page)</span></h4>
+                    <h4 class="text-sm font-semibold">Assets <span
+                            class="text-muted-foreground text-xs font-normal">(public page)</span></h4>
 
                     <div>
                         <label class="block text-xs font-medium mb-1">Banner image</label>
@@ -284,12 +308,12 @@
                     <div>
                         <label class="block text-xs font-medium mb-1">Hero copy / headline</label>
                         <input name="hero_copy" class="kt-input"
-                               placeholder="e.g. Exceptional vehicles, exceptional prices" />
+                            placeholder="e.g. Exceptional vehicles, exceptional prices" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">Terms snippet (visible to participants)</label>
                         <textarea name="terms_snippet" rows="4" class="kt-input w-full"
-                                  placeholder="Summary of terms for this auction…"></textarea>
+                            placeholder="Summary of terms for this auction…"></textarea>
                     </div>
                 </div>
 
@@ -301,12 +325,12 @@
                     </p>
 
                     <div id="auction-wizard-summary"
-                         class="bg-muted/30 rounded border border-border p-4 text-sm space-y-2 max-h-64 overflow-y-auto">
+                        class="bg-muted/30 rounded border border-border p-4 text-sm space-y-2 max-h-64 overflow-y-auto">
                         {{-- populated by JS --}}
                     </div>
 
                     <div id="wizard-validation-flags"
-                         class="hidden rounded border border-red-200 bg-red-50 p-3 text-xs text-red-700 space-y-1">
+                        class="hidden rounded border border-red-200 bg-red-50 p-3 text-xs text-red-700 space-y-1">
                         {{-- validation issues injected by JS --}}
                     </div>
                 </div>
@@ -326,3 +350,118 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const radios = document.querySelectorAll('input[name="participant_mode"]');
+
+    const wrap = document.getElementById("vendor-select-wrap");
+    const searchInput = document.getElementById("vendor-search");
+    const resultsBox = document.getElementById("vendor-results");
+    const selectedBox = document.getElementById("vendor-selected");
+
+    let vendors = [];
+    let selected = new Map();
+
+    // -----------------------------
+    // Dummy vendors (replace later with API if needed)
+    // -----------------------------
+    function loadVendors() {
+        // simulate large dataset (40k safe)
+        vendors = Array.from({ length: 5000 }).map((_, i) => ({
+            id: i + 1,
+            name: "Vendor " + (i + 1)
+        }));
+    }
+
+    loadVendors();
+
+    // -----------------------------
+    // Render list (LIMITED results for performance)
+    // -----------------------------
+    function renderResults(query = "") {
+        const q = query.toLowerCase();
+
+        const filtered = vendors
+            .filter(v => v.name.toLowerCase().includes(q))
+            .slice(0, 50); // IMPORTANT: limit DOM nodes
+
+        resultsBox.innerHTML = filtered.map(v => `
+            <div class="px-2 py-1 cursor-pointer hover:bg-gray-100 flex justify-between"
+                 data-id="${v.id}" data-name="${v.name}">
+                <span>${v.name}</span>
+                <span class="text-xs text-gray-400">+</span>
+            </div>
+        `).join("");
+    }
+
+    // -----------------------------
+    // Render selected chips
+    // -----------------------------
+    function renderSelected() {
+        selectedBox.innerHTML = "";
+
+        selected.forEach(v => {
+            const el = document.createElement("span");
+            el.className = "px-2 py-1 text-xs bg-primary text-white rounded flex items-center gap-1";
+            el.innerHTML = `
+                ${v.name}
+                <button type="button" data-id="${v.id}" class="ml-1">×</button>
+            `;
+            selectedBox.appendChild(el);
+        });
+    }
+
+    // -----------------------------
+    // Mode switch
+    // -----------------------------
+    radios.forEach(radio => {
+        radio.addEventListener("change", () => {
+            const val = document.querySelector('input[name="participant_mode"]:checked')?.value;
+
+            if (val === "invite") {
+                wrap.classList.remove("hidden");
+                renderResults();
+            } else {
+                wrap.classList.add("hidden");
+            }
+        });
+    });
+
+    // -----------------------------
+    // Search input (debounced)
+    // -----------------------------
+    let timer;
+    searchInput?.addEventListener("input", (e) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            renderResults(e.target.value);
+        }, 200);
+    });
+
+    // -----------------------------
+    // Click to select vendor
+    // -----------------------------
+    resultsBox.addEventListener("click", (e) => {
+        const item = e.target.closest("[data-id]");
+        if (!item) return;
+
+        const id = item.dataset.id;
+        const name = item.dataset.name;
+
+        selected.set(id, { id, name });
+        renderSelected();
+    });
+
+    // -----------------------------
+    // Remove selected vendor
+    // -----------------------------
+    selectedBox.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-id]");
+        if (!btn) return;
+
+        selected.delete(btn.dataset.id);
+        renderSelected();
+    });
+});
+</script>
