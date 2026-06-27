@@ -109,17 +109,18 @@
 
     {{-- ── Left: Tabs ─────────────────────────────────────────────────────── --}}
     <div>
-        {{-- Tab bar --}}
-        <div class="border-b border-border mb-5 overflow-x-auto">
-            <div class="flex gap-1 min-w-max px-1 pt-1">
-                @foreach (['Overview','Parties','Commercials','Logistics','Documents','Communications','Financials','Activity','History'] as $tab)
-                    <button data-deal-tab="{{ Str::slug($tab) }}"
-                            class="deal-tab-btn kt-btn kt-btn-sm
-                                   {{ $loop->first ? 'kt-btn-mono' : 'kt-btn-ghost' }}">
-                        {{ $tab }}
-                    </button>
-                @endforeach
-            </div>
+        {{-- Tab nav — exact match to Listing Detail tab styling --}}
+        <div class="kt-scrollable-x flex gap-0.5 px-4 pt-3 border-b border-border whitespace-nowrap shrink-0">
+            @foreach (['Overview', 'Vehicle', 'Seller', 'Media', 'Documents', 'Pricing', 'QA', 'Valuations', 'Auction', 'Notes', 'Activity', 'History'] as $tab)
+                @php $tabId = strtolower($tab); @endphp
+                <button
+                    class="deal-tab-btn px-3 py-2 text-sm rounded-t-lg whitespace-nowrap font-medium transition-colors
+                            @if ($loop->first) bg-background border border-b-0 border-border text-foreground
+                            @else text-muted-foreground hover:text-foreground @endif"
+                    data-deal-tab="{{ $tabId }}">
+                    {{ $tab }}
+                </button>
+            @endforeach
         </div>
 
         {{-- ── TAB: Overview ─────────────────────────────────────────────── --}}
@@ -190,19 +191,107 @@
             </div>
         </div>
 
-        {{-- ── TAB: Parties ───────────────────────────────────────────────── --}}
-        <div id="deal-tab-parties" class="deal-tab-content hidden space-y-4">
-            @include('deals.partials._parties_tab', ['deal' => $deal])
+        {{-- ── TAB: Vehicle ───────────────────────────────────────────────── --}}
+        <div id="deal-tab-vehicle" class="deal-tab-content hidden space-y-4">
+            <div class="card border border-border rounded-xl p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vehicle</h3>
+                    @if ($deal['listing_id'] ?? null)
+                        <a href="{{ route('listings.show', $deal['listing_id']) }}" class="kt-btn kt-btn-ghost kt-btn-sm">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1"></i>Open listing
+                        </a>
+                    @endif
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                    <div>
+                        <div class="text-xs text-muted-foreground">Vehicle</div>
+                        <strong>{{ $deal['vehicle_title'] ?? '—' }}</strong>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted-foreground">VRM</div>
+                        <span class="font-mono">{{ $deal['vrm'] ?? '—' }}</span>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted-foreground">Mileage</div>
+                        <strong>{{ isset($deal['mileage']) ? number_format($deal['mileage']) . ' mi' : '—' }}</strong>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted-foreground">Sale Type</div>
+                        <strong>{{ $deal['sale_type'] ?? 'CST1' }}</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="card border border-border rounded-xl p-4">
+                <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Condition Notes</h3>
+                <p class="text-sm text-muted-foreground">
+                    {{ $deal['vehicle_condition_notes'] ?? 'No condition notes recorded on the listing yet.' }}
+                </p>
+            </div>
         </div>
 
-        {{-- ── TAB: Commercials ───────────────────────────────────────────── --}}
-        <div id="deal-tab-commercials" class="deal-tab-content hidden space-y-4">
-            @include('deals.partials._commercials_tab', ['deal' => $deal])
+        {{-- ── TAB: Seller ────────────────────────────────────────────────── --}}
+        <div id="deal-tab-seller" class="deal-tab-content hidden space-y-4">
+            <div class="card border border-border rounded-xl p-4 space-y-3">
+                <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Seller</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div><div class="text-xs text-muted-foreground">Name</div><strong>{{ $deal['seller_name'] ?? '—' }}</strong></div>
+                    <div><div class="text-xs text-muted-foreground">Email</div><span>{{ $deal['seller_email'] ?? '—' }}</span></div>
+                    <div><div class="text-xs text-muted-foreground">Phone</div><span>{{ $deal['seller_phone'] ?? '—' }}</span></div>
+                    <div>
+                        <div class="text-xs text-muted-foreground">KYC Status</div>
+                        @if ($deal['kyc_verified'] ?? false)
+                            <span class="kt-badge kt-badge-success kt-badge-sm">Verified</span>
+                        @else
+                            <span class="kt-badge kt-badge-warning kt-badge-sm">Pending</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="card border border-border rounded-xl p-4 space-y-3">
+                <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Buyer</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div><div class="text-xs text-muted-foreground">Name</div><strong>{{ $deal['buyer_name'] ?? '—' }}</strong></div>
+                    <div><div class="text-xs text-muted-foreground">Email</div><span>{{ $deal['buyer_email'] ?? '—' }}</span></div>
+                    <div><div class="text-xs text-muted-foreground">Phone</div><span>{{ $deal['buyer_phone'] ?? '—' }}</span></div>
+                    <div>
+                        <div class="text-xs text-muted-foreground">Card on file</div>
+                        @if ($deal['card_on_file'] ?? false)
+                            <span class="kt-badge kt-badge-primary kt-badge-sm">Yes</span>
+                        @else
+                            <span class="kt-badge kt-badge-outline kt-badge-sm">No</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
 
-        {{-- ── TAB: Logistics ─────────────────────────────────────────────── --}}
-        <div id="deal-tab-logistics" class="deal-tab-content hidden space-y-4">
-            @include('deals.partials._logistics_tab', ['deal' => $deal])
+        {{-- ── TAB: Media ─────────────────────────────────────────────────── --}}
+        <div id="deal-tab-media" class="deal-tab-content hidden space-y-4">
+            <div class="card border border-border rounded-xl p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Photos &amp; Video</h3>
+                    @if ($deal['listing_id'] ?? null)
+                        <a href="{{ route('listings.show', $deal['listing_id']) }}#media" class="kt-btn kt-btn-ghost kt-btn-sm">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1"></i>Manage on listing
+                        </a>
+                    @endif
+                </div>
+                @if (!empty($deal['photos']))
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        @foreach ($deal['photos'] as $photo)
+                            <a href="{{ $photo['url'] ?? '#' }}" target="_blank"
+                               class="aspect-square rounded-lg border border-border bg-muted/20 flex items-center justify-center overflow-hidden">
+                                <img src="{{ $photo['thumb'] ?? $photo['url'] ?? '' }}" alt="" class="w-full h-full object-cover" />
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 text-sm text-muted-foreground">
+                        <i data-lucide="image" class="w-8 h-8 mx-auto mb-2 opacity-30"></i>
+                        Photos are managed on the linked listing.
+                    </div>
+                @endif
+            </div>
         </div>
 
         {{-- ── TAB: Documents ─────────────────────────────────────────────── --}}
@@ -210,14 +299,125 @@
             @include('deals.partials._documents_tab', ['deal' => $deal])
         </div>
 
-        {{-- ── TAB: Communications ────────────────────────────────────────── --}}
-        <div id="deal-tab-communications" class="deal-tab-content hidden space-y-4">
-            @include('deals.partials._comms_tab', ['deal' => $deal])
+        {{-- ── TAB: Pricing ───────────────────────────────────────────────── --}}
+        <div id="deal-tab-pricing" class="deal-tab-content hidden space-y-4">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                @foreach ([
+                    ['Guide Price',  isset($deal['guide']) ? '£'.number_format($deal['guide']) : '—'],
+                    ['Reserve',      isset($deal['reserve']) ? '£'.number_format($deal['reserve']) : 'Not set'],
+                    ['BIN Price',    isset($deal['bin_price']) ? '£'.number_format($deal['bin_price']) : 'Off'],
+                    ['Agreed Price', '£'.number_format($deal['price'] ?? 0)],
+                ] as [$l, $v])
+                    <div class="card border border-border p-3 rounded-xl">
+                        <div class="text-xs text-muted-foreground">{{ $l }}</div>
+                        <div class="font-medium mt-0.5 text-sm">{{ $v }}</div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="card border border-border rounded-xl p-4">
+                <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Adjustments</h3>
+                <p class="text-sm text-muted-foreground">
+                    Use <strong>Adjust price</strong> above to change the agreed price. Changes are
+                    logged in <strong>Activity</strong> and <strong>History</strong>.
+                </p>
+                <button id="btn-adjust-price-pricing-tab" class="kt-btn kt-btn-outline kt-btn-sm mt-3">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5 mr-1"></i>Adjust price
+                </button>
+            </div>
         </div>
 
-        {{-- ── TAB: Financials ────────────────────────────────────────────── --}}
-        <div id="deal-tab-financials" class="deal-tab-content hidden space-y-4">
-            @include('deals.partials._financials_tab', ['deal' => $deal])
+        {{-- ── TAB: QA ────────────────────────────────────────────────────── --}}
+        <div id="deal-tab-qa" class="deal-tab-content hidden space-y-4">
+            <div class="space-y-2">
+                @php
+                    $qaChecks = $deal['qa_checks'] ?? [
+                        ['label' => 'Required Photos', 'status' => 'Complete', 'badge' => 'success'],
+                        ['label' => 'V5C Document',    'status' => ($deal['v5c_uploaded'] ?? false) ? 'Present' : 'Missing', 'badge' => ($deal['v5c_uploaded'] ?? false) ? 'success' : 'danger'],
+                        ['label' => 'KYC Verified',    'status' => ($deal['kyc_verified'] ?? false) ? 'Verified' : 'Pending', 'badge' => ($deal['kyc_verified'] ?? false) ? 'success' : 'warning'],
+                        ['label' => 'Pricing Set',     'status' => 'Complete', 'badge' => 'success'],
+                        ['label' => 'Handover Signed', 'status' => ($deal['handover_signed'] ?? false) ? 'Signed' : 'Pending', 'badge' => ($deal['handover_signed'] ?? false) ? 'success' : 'warning'],
+                    ];
+                @endphp
+                @foreach ($qaChecks as $check)
+                    <div class="card border border-border p-3 flex items-center justify-between text-sm rounded-xl">
+                        <span>{{ $check['label'] }}</span>
+                        <span class="kt-badge kt-badge-{{ $check['badge'] }}">{{ $check['status'] }}</span>
+                    </div>
+                @endforeach
+            </div>
+            @if ($deal['listing_id'] ?? null)
+                <a href="{{ route('listings.show', $deal['listing_id']) }}" class="kt-btn kt-btn-outline kt-btn-sm w-full">
+                    View full QA on listing
+                </a>
+            @endif
+        </div>
+
+        {{-- ── TAB: Valuations ────────────────────────────────────────────── --}}
+        <div id="deal-tab-valuations" class="deal-tab-content hidden space-y-4">
+            <div class="card border border-border rounded-xl p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Latest Valuation</h3>
+                    @if ($deal['listing_id'] ?? null)
+                        <a href="{{ route('listings.show', $deal['listing_id']) }}#valuations" class="kt-btn kt-btn-ghost kt-btn-sm">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1"></i>View full history
+                        </a>
+                    @endif
+                </div>
+                <div class="flex flex-wrap items-end gap-6">
+                    <div>
+                        <div class="text-xs text-muted-foreground mb-1">Amount</div>
+                        <div class="text-2xl font-bold tracking-tight">
+                            £{{ number_format($deal['valuation'] ?? 0) }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted-foreground mb-1">Source</div>
+                        <div class="font-medium text-sm">{{ $deal['valuation_source'] ?? 'Internal (Carsmart)' }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted-foreground mb-1">vs Agreed Price</div>
+                        @php $vDelta = ($deal['valuation'] ?? 0) - ($deal['price'] ?? 0); @endphp
+                        <span class="kt-badge {{ $vDelta >= 0 ? 'kt-badge-success' : 'kt-badge-danger' }} text-xs">
+                            {{ $vDelta >= 0 ? '+' : '' }}£{{ number_format($vDelta) }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ── TAB: Auction ───────────────────────────────────────────────── --}}
+        <div id="deal-tab-auction" class="deal-tab-content hidden space-y-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
+                @foreach ([
+                    ['Auction Code', $deal['auction_code'] ?? '—'],
+                    ['Status',       $deal['auction_status'] ?? '—'],
+                    ['Sale Source',  $deal['source'] ?? '—'],
+                ] as [$l, $v])
+                    <div class="card border border-border p-3 rounded-xl">
+                        <div class="text-xs text-muted-foreground">{{ $l }}</div>
+                        <div class="font-medium">{{ $v }}</div>
+                    </div>
+                @endforeach
+            </div>
+            @if ($deal['auction_code'] ?? null)
+                <a href="{{ route('auctions.show', $deal['auction_id'] ?? '') }}" class="kt-btn kt-btn-outline kt-btn-sm">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1"></i>View auction
+                </a>
+            @else
+                <div class="text-center py-8 text-sm text-muted-foreground">
+                    <i data-lucide="flag" class="w-8 h-8 mx-auto mb-2 opacity-30"></i>
+                    This deal did not originate from an auction.
+                </div>
+            @endif
+        </div>
+
+        {{-- ── TAB: Notes ─────────────────────────────────────────────────── --}}
+        <div id="deal-tab-notes" class="deal-tab-content hidden">
+            <textarea id="deal-notes-tab" class="kt-input w-full" rows="6"
+                      placeholder="Add internal notes…">{{ $deal['notes'] ?? '' }}</textarea>
+            <button id="btn-save-notes-tab" class="kt-btn kt-btn-mono mt-2">
+                <i data-lucide="save" class="w-3.5 h-3.5 mr-1"></i>Save Note
+            </button>
         </div>
 
         {{-- ── TAB: Activity ──────────────────────────────────────────────── --}}
@@ -230,6 +430,7 @@
             @include('deals.partials._history_tab', ['deal' => $deal])
         </div>
     </div>
+
 
     {{-- ── Right panel ──────────────────────────────────────────────────── --}}
     <aside class="space-y-4">
@@ -422,16 +623,17 @@
     const { toast, openModal, closeModal, auditEvent } = window.CS4;
     const $ = id => document.getElementById(id) ?? document.querySelector(id);
 
-    /* ── Tab switching ──────────────────────────────────────────────────── */
+    /* ── Tab switching — exact match to Listing Detail tab behaviour ──────── */
     document.addEventListener('click', e => {
         const btn = e.target.closest('.deal-tab-btn');
         if (!btn) return;
         const tab = btn.dataset.dealTab;
         document.querySelectorAll('.deal-tab-btn').forEach(b => {
-            const a = b.dataset.dealTab === tab;
-            b.classList.toggle('kt-btn-mono', a);
-            b.classList.toggle('kt-btn-ghost', !a);
+            b.classList.remove('bg-background', 'border', 'border-b-0', 'border-border', 'text-foreground');
+            b.classList.add('text-muted-foreground');
         });
+        btn.classList.add('bg-background', 'border', 'border-b-0', 'border-border', 'text-foreground');
+        btn.classList.remove('text-muted-foreground');
         document.querySelectorAll('.deal-tab-content').forEach(c =>
             c.classList.toggle('hidden', c.id !== 'deal-tab-' + tab)
         );
@@ -439,6 +641,7 @@
 
     /* ── Modal triggers ─────────────────────────────────────────────────── */
     $('btn-adjust-price')?.addEventListener('click', () => openModal('modal-adjust-price'));
+    $('btn-adjust-price-pricing-tab')?.addEventListener('click', () => openModal('modal-adjust-price'));
     $('btn-request-payout')?.addEventListener('click', () => openModal('modal-request-payout'));
     $('btn-cancel-rerun')?.addEventListener('click', () => openModal('modal-cancel-rerun'));
     $('btn-confirm-handover')?.addEventListener('click', () => {
@@ -478,6 +681,10 @@
 
     /* ── Save notes ─────────────────────────────────────────────────────── */
     $('btn-save-notes')?.addEventListener('click', () => {
+        auditEvent('deal_notes_updated', { deal: '{{ $deal["id"] }}' });
+        toast('Notes saved.', 'success');
+    });
+    $('btn-save-notes-tab')?.addEventListener('click', () => {
         auditEvent('deal_notes_updated', { deal: '{{ $deal["id"] }}' });
         toast('Notes saved.', 'success');
     });
