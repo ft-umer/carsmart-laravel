@@ -4,6 +4,63 @@
 
 @section('content')
 
+@php
+    // ---- Vehicle check data (HPI / Owners / MOT advisories / Exterior grading) ----
+    // Falls back to sensible demo defaults if the listing doesn't provide real data yet.
+    $vcVehicleMeta = collect([
+        $listing['vehicle_year'] ?? null,
+        $listing['vehicle_colour'] ?? null,
+        $listing['vehicle_body_type'] ?? null,
+        $listing['vehicle_fuel_type'] ?? null,
+    ])->filter()->implode(' | ');
+
+    $vehicleChecksData = [
+        'hpi' => [
+            'title' => 'HPI History Check',
+            'items' => $listing['hpi_checks'] ?? [
+                'Not imported from outside of the EU',
+                'Not been salvaged',
+                'Not been used as a taxi',
+                'Has valid MOT certificate',
+                'Not been stolen',
+                'Not on finance',
+                'Not on a security watch register',
+                'Not a write-off for damage',
+                'Not a write-off for theft',
+                'No plate changes',
+            ],
+            'checked_at' => $listing['hpi_checked_at'] ?? now()->format('d/m/Y'),
+            'source' => $listing['hpi_source'] ?? 'Experian & Total Car Check',
+        ],
+        'owners' => [
+            'title' => 'Previous Owners',
+            'count' => $listing['previous_owners'] ?? 2,
+            'rows' => $listing['ownership_history'] ?? [
+                ['owner' => '1', 'length' => '3 years, 4 months and 24 days'],
+                ['owner' => 'Current', 'length' => '3 years, 4 months and 24 days'],
+            ],
+        ],
+        'mot-advisories' => [
+            'title' => 'MOT Advisories',
+            'count' => $listing['mot_advisories_count'] ?? 1,
+            'advisories' => $listing['mot_advisories'] ?? [
+                'Nearside front tyre wearing close to the legal limit.',
+            ],
+            'notes' => $listing['mot_advisory_notes'] ?? '',
+        ],
+        'exterior-grading' => [
+            'title' => 'Exterior Grading',
+            'grade' => $listing['exterior_grade'] ?? 'A',
+            'columns' => ['A', 'B', 'C'],
+            'rows' => $listing['exterior_grading_rows'] ?? [
+                ['label' => 'Panel condition', 'A' => 'Minimal wear', 'B' => 'Light scuffs', 'C' => 'Visible damage'],
+                ['label' => 'Paintwork', 'A' => 'Excellent finish', 'B' => 'Minor fading', 'C' => 'Significant fading'],
+                ['label' => 'Alloys / trims', 'A' => 'Like new', 'B' => 'Light kerbing', 'C' => 'Heavy kerbing'],
+            ],
+        ],
+    ];
+@endphp
+
 <div class="kt-container-fixed py-6 overflow-x-hidden">
 {{-- Breadcrumb --}}
 <nav class="flex items-center gap-1.5 text-xs text-muted-foreground mb-4">
@@ -213,7 +270,8 @@
 
                 {{-- ===== VEHICLE ===== --}}
                 {{-- Spec L2 "Vehicle": VRM/source/status fields + spec/seat/keys/tools/lug-nut/charging/smoking notes
-                     (folded in from the old Status + Specifications tabs) --}}
+                     (folded in from the old Status + Specifications tabs), plus Features / Specifications /
+                     Vehicle Details / Vehicle History & Checks (HPI, Previous Owners, MOT Advisories, Exterior Grading) --}}
                 <div data-tab-pane="vehicle" class="hidden space-y-4">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -279,6 +337,118 @@
                         <input class="kt-input w-full" type="text" placeholder="e.g., AutoTrader, eBay Motors, Gumtree">
                     </div>
 
+                    {{-- ===== FEATURES ===== --}}
+                    <div class="border-t border-border pt-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="font-semibold text-sm">Features</div>
+                            <button type="button" class="kt-btn kt-btn-xs kt-btn-outline" data-add-feature-btn>
+                                <i class="ki-filled ki-plus"></i> Add Feature
+                            </button>
+                        </div>
+                        <div class="flex flex-wrap gap-2" id="vehicle-features-list">
+                            @forelse (($listing['features'] ?? ['Navigation', 'Heated Seats', 'Parking Sensors', 'Cruise Control']) as $feature)
+                                <span class="kt-badge kt-badge-outline text-xs px-3 py-1.5 flex items-center gap-1.5">
+                                    <i class="ki-filled ki-check-circle text-success text-xs"></i> {{ $feature }}
+                                </span>
+                            @empty
+                                <span class="text-xs text-muted-foreground">No features recorded yet.</span>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    {{-- ===== SPECIFICATIONS ===== --}}
+                    <div class="border-t border-border pt-4">
+                        <div class="font-semibold text-sm mb-3">Specifications</div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            @foreach ([
+                                ['Exterior Color', $listing['exterior_colour'] ?? $listing['vehicle_colour'] ?? '—'],
+                                ['Seats Material', $listing['seats_material'] ?? '—'],
+                                ['Body Type', $listing['vehicle_body_type'] ?? '—'],
+                                ['Gearbox', $listing['gearbox'] ?? '—'],
+                                ['Fuel Type', $listing['vehicle_fuel_type'] ?? '—'],
+                                ['Engine Size', $listing['engine_size'] ?? '—'],
+                            ] as [$l, $v])
+                                <div class="card border border-border p-3 rounded-xl">
+                                    <div class="text-xs text-muted-foreground">{{ $l }}</div>
+                                    <div class="font-medium mt-0.5 text-sm">{{ $v }}</div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- ===== VEHICLE DETAILS (+ history/check links) ===== --}}
+                    <div class="border-t border-border pt-4">
+                        <div class="font-semibold text-sm mb-3">Vehicle Details</div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+                            {{-- HPI history — opens HPI History Check modal --}}
+                            <button type="button" class="card border border-border rounded-xl p-3 text-left hover:bg-muted/5 transition" data-history-check="hpi">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-muted-foreground">HPI History</span>
+                                    <i class="ki-filled ki-shield-tick text-success text-sm"></i>
+                                </div>
+                                <div class="font-medium text-sm">{{ $listing['hpi_summary'] ?? 'All Clear' }}</div>
+                            </button>
+
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">Registration</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ $listing['vrm'] ?? '—' }}</div>
+                            </div>
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">VIN</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ $listing['vin'] ?? '—' }}</div>
+                            </div>
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">First Registered</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ $listing['first_registered'] ?? '—' }}</div>
+                            </div>
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">Keeper Start Date</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ $listing['keeper_start_date'] ?? '—' }}</div>
+                            </div>
+
+                            {{-- Previous owners — opens Previous Owners modal --}}
+                            <button type="button" class="card border border-border rounded-xl p-3 text-left hover:bg-muted/5 transition" data-history-check="owners">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-muted-foreground">Previous Owners</span>
+                                    <i class="ki-filled ki-user text-muted-foreground text-sm"></i>
+                                </div>
+                                <div class="font-medium text-sm">{{ $listing['previous_owners'] ?? 2 }} owners</div>
+                            </button>
+
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">No. of Keys</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ $listing['no_of_keys'] ?? '—' }}</div>
+                            </div>
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">On Finance</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ ($listing['on_finance'] ?? false) ? 'Yes' : 'No' }}</div>
+                            </div>
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">Private Plate</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ ($listing['private_plate'] ?? false) ? 'Yes' : 'No' }}</div>
+                            </div>
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">Seller Keeping Plate</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ ($listing['seller_keeping_plate'] ?? false) ? 'Yes' : 'No' }}</div>
+                            </div>
+                            <div class="card border border-border p-3 rounded-xl">
+                                <div class="text-xs text-muted-foreground">Original Plate</div>
+                                <div class="font-medium mt-0.5 text-sm">{{ $listing['original_plate'] ?? '—' }}</div>
+                            </div>
+
+                            {{-- Exterior grading — opens Exterior Grading modal --}}
+                            <button type="button" class="card border border-border rounded-xl p-3 text-left hover:bg-muted/5 transition" data-history-check="exterior-grading">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-muted-foreground">Exterior Grading</span>
+                                    <i class="ki-filled ki-star text-muted-foreground text-sm"></i>
+                                </div>
+                                <div class="font-medium text-sm">Grade {{ $listing['exterior_grade'] ?? 'A' }}</div>
+                            </button>
+
+                        </div>
+                    </div>
+
                     <div class="border-t border-border pt-4">
                         <div class="font-semibold text-sm mb-3">Vehicle Specifications</div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -310,7 +480,12 @@
                     </div>
 
                     <div class="border-t border-border pt-4">
-                        <div class="font-semibold text-sm mb-3">MOT</div>
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="font-semibold text-sm">MOT</div>
+                            <button type="button" class="kt-btn kt-btn-xs kt-btn-outline" data-history-check="mot-advisories">
+                                <i class="ki-filled ki-information-4"></i> View MOT Advisories
+                            </button>
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-xs text-muted-foreground mb-1 block">MOT Status *</label>
@@ -1635,6 +1810,51 @@
         </div>
     </div>
 
+    {{-- ===== VEHICLE CHECK MODAL (HPI History / Previous Owners / MOT Advisories / Exterior Grading) =====
+         Single modal, content rendered per data-history-check type. Styling follows the reference design:
+         dark gradient card, VRM plate badge, vehicle avatar + name/spec line, content panel below. --}}
+    <div id="vehicle-check-modal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-4">
+        <div class="rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-indigo-900 to-blue-700 text-white max-h-[85vh] flex flex-col">
+
+            <div class="p-5 relative overflow-y-auto">
+                <button class="absolute top-4 right-4 w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center" data-modal-close="vehicle-check-modal">
+                    <i class="ki-filled ki-cross text-xs"></i>
+                </button>
+
+                <h3 class="text-lg font-semibold mb-4" id="vc-modal-title">Vehicle Check</h3>
+
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="flex items-center bg-white text-slate-900 rounded-md overflow-hidden text-sm font-bold">
+                        <span class="bg-blue-600 w-2 h-full block"></span>
+                        <span class="px-3 py-1.5 tracking-wide" id="vc-modal-vrm">{{ $listing['vrm'] ?? 'AB19 CDE' }}</span>
+                    </span>
+                    <span class="text-xs text-white/70" id="vc-modal-subcount"></span>
+                </div>
+
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                        <i class="ki-filled ki-car text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="font-bold text-base leading-tight truncate" id="vc-modal-vehicle-name">{{ $listing['vehicle'] ?? 'Vehicle' }}</div>
+                        <div class="text-xs text-white/70 mt-0.5" id="vc-modal-vehicle-meta">{{ $vcVehicleMeta ?: ($listing['vehicle'] ?? '') }}</div>
+                    </div>
+                </div>
+
+                <div class="bg-white/10 rounded-xl p-4" id="vc-modal-body">
+                    {{-- populated dynamically per check type --}}
+                </div>
+
+                <p class="text-[11px] text-white/50 mt-4" id="vc-modal-footnote"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const vehicleChecksData = @json($vehicleChecksData);
+    const vcVehicleMeta = @json($vcVehicleMeta);
+    </script>
+
     <script>
     (function () {
 
@@ -1678,7 +1898,7 @@
         });
 
         // Close on backdrop click
-        ['pull-valuation-modal', 'add-valuation-modal', 'apply-pricing-modal'].forEach(id => {
+        ['pull-valuation-modal', 'add-valuation-modal', 'apply-pricing-modal', 'vehicle-check-modal'].forEach(id => {
             document.getElementById(id)?.addEventListener('click', e => {
                 if (e.target.id === id) closeModal(id);
             });
@@ -1917,6 +2137,69 @@
                         entry.classList.add('hidden');
                     }
                 });
+            });
+        });
+
+        // ===== VEHICLE CHECK MODAL (HPI / Previous Owners / MOT Advisories / Exterior Grading) =====
+        function renderVehicleCheck(type) {
+            const data = vehicleChecksData[type];
+            if (!data) return;
+
+            document.getElementById('vc-modal-title').textContent = data.title;
+            document.getElementById('vc-modal-vehicle-meta').textContent = vcVehicleMeta;
+
+            const body     = document.getElementById('vc-modal-body');
+            const subcount = document.getElementById('vc-modal-subcount');
+            const footnote = document.getElementById('vc-modal-footnote');
+            subcount.textContent = '';
+            footnote.textContent = '';
+
+            if (type === 'hpi') {
+                body.innerHTML = `<ul class="space-y-2.5 text-sm">${data.items.map(i =>
+                    `<li class="flex items-start gap-2"><i class="ki-filled ki-check-circle text-lime-400 mt-0.5"></i><span>${i}</span></li>`
+                ).join('')}</ul>`;
+                footnote.textContent = `Vehicle history check completed on ${data.checked_at} using data from ${data.source}. Please note that all warranties are disclaimed — we recommend carrying out your own checks to ensure you're fully informed.`;
+            }
+
+            else if (type === 'owners') {
+                subcount.textContent = `${data.count} owner${data.count === 1 ? '' : 's'}`;
+                body.innerHTML = `<table class="w-full text-sm">
+                    <thead><tr class="text-left text-white/60 text-xs">
+                        <th class="pb-2 font-medium">Owner</th>
+                        <th class="pb-2 font-medium text-right">Length of ownership</th>
+                    </tr></thead>
+                    <tbody class="divide-y divide-white/10">
+                        ${data.rows.map(r => `<tr><td class="py-2">${r.owner}</td><td class="py-2 text-right">${r.length}</td></tr>`).join('')}
+                    </tbody>
+                </table>`;
+            }
+
+            else if (type === 'mot-advisories') {
+                subcount.textContent = `${data.count} advisor${data.count === 1 ? 'y' : 'ies'}`;
+                body.innerHTML = `<div class="space-y-2 text-sm">
+                    ${data.advisories.map(a => `<div class="bg-white/5 rounded-lg px-3 py-2">${a}</div>`).join('')}
+                </div>`;
+                if (data.notes) footnote.textContent = data.notes;
+            }
+
+            else if (type === 'exterior-grading') {
+                subcount.textContent = `Grade ${data.grade}`;
+                body.innerHTML = `<div class="overflow-x-auto"><table class="w-full text-sm min-w-[360px]">
+                    <thead><tr class="text-left text-white/60 text-xs">
+                        <th class="pb-2 pr-3 font-medium">Area</th>
+                        ${data.columns.map(c => `<th class="pb-2 pr-3 font-medium">${c}</th>`).join('')}
+                    </tr></thead>
+                    <tbody class="divide-y divide-white/10">
+                        ${data.rows.map(r => `<tr><td class="py-2 pr-3 text-white/70">${r.label}</td>${data.columns.map(c => `<td class="py-2 pr-3">${r[c] ?? '—'}</td>`).join('')}</tr>`).join('')}
+                    </tbody>
+                </table></div>`;
+            }
+        }
+
+        document.querySelectorAll('[data-history-check]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                renderVehicleCheck(btn.dataset.historyCheck);
+                openModal('vehicle-check-modal');
             });
         });
 
