@@ -1824,7 +1824,7 @@
                 <h3 class="text-lg font-semibold mb-4" id="vc-modal-title">Vehicle Check</h3>
 
                 <div class="flex items-center gap-2 mb-4">
-                    <span class="flex items-center bg-white text-slate-900 rounded-md overflow-hidden text-sm font-bold">
+                    <span class="flex items-center bg-background text-foreground rounded-md overflow-hidden text-sm font-bold">
                         <span class="bg-blue-600 w-2 h-full block"></span>
                         <span class="px-3 py-1.5 tracking-wide" id="vc-modal-vrm">{{ $listing['vrm'] ?? 'AB19 CDE' }}</span>
                     </span>
